@@ -1,0 +1,39 @@
+import 'package:carbon_footprint_tracker/screens/activity/movement_activity/update_transport_mode_bottom_sheet.dart';
+import 'package:carbon_footprint_tracker/utils/extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../models/carbon_activity/movement_activity.dart';
+
+class TransportModeTile extends ConsumerWidget {
+  final MovementActivity activity;
+
+  const TransportModeTile({
+    Key? key,
+    required this.activity,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.commute_outlined),
+      title: Text(activity.transportMode.name.capitalize()),
+      subtitle: const Text("Transport Mode"),
+      trailing: IgnorePointer(
+        child: IconButton(
+          icon: const Icon(Icons.edit_outlined),
+          onPressed: () {},
+        ),
+      ),
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return UpdateTransportModeBottomSheet(activity: activity);
+          },
+        );
+      },
+    );
+  }
+}
