@@ -265,8 +265,8 @@ class MovementActivity implements CarbonActivity {
       endLong: endLong ?? this.endLong,
       distance: distance ?? this.distance,
       transportMode: transportMode ?? this.transportMode,
-      fuelType: fuelType,
-      vehicleSize: vehicleSize,
+      fuelType: fuelType ?? this.fuelType,
+      vehicleSize: vehicleSize ?? this.vehicleSize,
     );
   }
 }
