@@ -1,6 +1,11 @@
+import 'dart:math';
+
+import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../carbon_activity/constants/transport_mode.dart';
 
 class TrackerContext {
   DateTime startTime;
@@ -8,11 +13,23 @@ class TrackerContext {
   Position? startPosition;
   Position? latestPosition;
   double distance;
+  List<TransportMode> vehicleHistory;
+  List<double> accelerometerWindow;
+  DateTime accelerometerWindowStartTime;
+  int accelerometerWindowSize;
 
   TrackerContext({
     DateTime? currentActivityStartTime,
+    List<TransportMode>? vehicleHistory,
+    List<double>? accelerometerWindow,
+    DateTime? accelerometerWindowStartTime,
     this.distance = 0,
-  }) : startTime = currentActivityStartTime ?? DateTime.now();
+    this.accelerometerWindowSize = 1,
+  })  : startTime = currentActivityStartTime ?? DateTime.now(),
+        vehicleHistory = vehicleHistory ?? [],
+        accelerometerWindow = accelerometerWindow ?? [],
+        accelerometerWindowStartTime =
+            accelerometerWindowStartTime ?? DateTime.now();
 
   Future<void> setStartPosition() async {
     startPosition = await Geolocator.getCurrentPosition();
@@ -39,5 +56,10 @@ class TrackerContext {
     );
 
     distance += newDistance;
+  }
+
+  void handleAcc(AccelerometerDataEvent event) {
+    print(
+        'min: ${event.min}, max: ${event.max}, mean: ${event.mean}, std: ${event.std}');
   }
 }
