@@ -1,18 +1,12 @@
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/tracker_event.dart';
 
-class AccelerometerDataEvent extends TrackerEvent {
+import '../../sensors/tmd_features.dart';
+
+class TMDSensorEvent extends TrackerEvent {
   @override
-  final String name = "accelerometer";
+  final String name = "TMD Sensor";
 
-  double min;
-  double max;
-  double mean;
-  double std;
+  TMDFeatures features;
 
-  AccelerometerDataEvent([
-    this.min = 0,
-    this.max = 0,
-    this.mean = 0,
-    this.std = 0,
-  ]);
+  TMDSensorEvent([this.features = const TMDFeatures()]);
 }

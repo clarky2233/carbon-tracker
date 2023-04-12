@@ -14,7 +14,7 @@ final eventsProvider = rp.StreamProvider<TrackerEvent>((ref) async* {
   yield* StreamGroup.merge<TrackerEvent>([
     ActivityRecognition.stream,
     Geo.stream,
-    Sensors.accelerometerStream,
+    Sensors.stream(const Duration(seconds: 5)),
   ]);
 });
 

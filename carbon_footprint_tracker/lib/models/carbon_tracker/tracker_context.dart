@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
 import 'package:geocoding/geocoding.dart';
@@ -58,8 +56,10 @@ class TrackerContext {
     distance += newDistance;
   }
 
-  void handleAcc(AccelerometerDataEvent event) {
-    print(
-        'min: ${event.min}, max: ${event.max}, mean: ${event.mean}, std: ${event.std}');
+  void handleAcc(TMDSensorEvent event) {
+    print("*********");
+    print(DateTime.now());
+    print(event.features);
+    print("-----------");
   }
 }
