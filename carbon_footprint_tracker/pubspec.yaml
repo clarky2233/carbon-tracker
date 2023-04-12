@@ -51,6 +51,7 @@ dependencies:
   collection: ^1.17.0
   sensors_plus: ^2.0.3
   statistics: ^1.0.23
+  pytorch_mobile: ^0.2.2
 
   async: any
   path: any

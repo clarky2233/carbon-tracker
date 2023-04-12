@@ -11,28 +11,45 @@ import 'package:statistics/statistics.dart';
 
 class Sensors {
   static Stream<TrackerEvent> stream(Duration windowSize) {
-    return accelerometerStream(windowSize).combineLatest<Map<String, double>, TrackerEvent>(
-        gyroscopeStream(windowSize), (accMap, gyroMap) {
-      return TMDSensorEvent(TMDFeatures(
-        accelerometerMin: accMap['min']!,
-        accelerometerMax: accMap['max']!,
-        accelerometerMean: accMap['mean']!,
-        accelerometerStd: accMap['std']!,
-        gyroscopeMin: gyroMap['min']!,
-        gyroscopeMax: gyroMap['max']!,
-        gyroscopeMean: gyroMap['mean']!,
-        gyroscopeStd: gyroMap['std']!,
-      ));
-    }).throttle(windowSize);
+    return accelerometerStream(windowSize)
+        .combineLatestAll([
+          gyroscopeStream(windowSize),
+          magnetometerStream(windowSize),
+        ])
+        .where((events) =>
+            events.map((e) => (e['id'] ?? 0).toInt()).toSet().length == 1)
+        .map(
+          (events) {
+            final accMap = events[0];
+            final gyroMap = events[1];
+            final magMap = events[2];
+
+            return TMDSensorEvent(TMDFeatures(
+              accelerometerMin: accMap['min']!,
+              accelerometerMax: accMap['max']!,
+              accelerometerMean: accMap['mean']!,
+              accelerometerStd: accMap['std']!,
+              gyroscopeMin: gyroMap['min']!,
+              gyroscopeMax: gyroMap['max']!,
+              gyroscopeMean: gyroMap['mean']!,
+              gyroscopeStd: gyroMap['std']!,
+              magnetometerMin: magMap['min']!,
+              magnetometerMax: magMap['max']!,
+              magnetometerMean: magMap['mean']!,
+              magnetometerStd: magMap['std']!,
+            ));
+          },
+        );
   }
 
   static Stream<Map<String, double>> accelerometerStream(Duration windowSize) {
+    double i = 0;
     return accelerometerEvents
         .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
         .window(windowSize)
         .map((window) {
-      // print("Accelerometer Window Done");
       return {
+        "id": ++i,
         "min": window.min,
         "max": window.max,
         "mean": window.average,
@@ -42,12 +59,29 @@ class Sensors {
   }
 
   static Stream<Map<String, double>> gyroscopeStream(Duration windowSize) {
+    double i = 0;
     return gyroscopeEvents
         .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
         .window(windowSize)
         .map((window) {
-      // print("Gyroscope Window Done");
       return {
+        "id": ++i,
+        "min": window.min,
+        "max": window.max,
+        "mean": window.average,
+        "std": window.standardDeviation,
+      };
+    });
+  }
+
+  static Stream<Map<String, double>> magnetometerStream(Duration windowSize) {
+    double i = 0;
+    return magnetometerEvents
+        .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
+        .window(windowSize)
+        .map((window) {
+      return {
+        "id": ++i,
         "min": window.min,
         "max": window.max,
         "mean": window.average,

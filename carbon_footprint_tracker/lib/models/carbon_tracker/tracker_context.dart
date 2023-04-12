@@ -57,9 +57,6 @@ class TrackerContext {
   }
 
   void handleAcc(TMDSensorEvent event) {
-    print("*********");
-    print(DateTime.now());
     print(event.features);
-    print("-----------");
   }
 }

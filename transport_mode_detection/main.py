@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, GridSearchCV
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from torch import nn
 from torch.utils.data import DataLoader, SubsetRandomSampler, Subset
@@ -15,8 +16,7 @@ from dataset import SensorDataset
 from tmd import TMD
 
 
-def load_dataset(filename: str):
-    sensors = ['android.sensor.accelerometer', 'android.sensor.gravity', 'android.sensor.gyroscope_uncalibrated']
+def load_dataset(filename: str, sensors: list[str]):
     measures = ['mean', 'min', 'max', 'std']
     targets = ['Car', 'Bus', 'Train']
 
@@ -78,16 +78,24 @@ def rf_std(train_features, test_features, train_labels, test_labels):
 
 
 def mlp_classifier(train_features, test_features, train_labels, test_labels):
-    mlp = MLPClassifier(hidden_layer_sizes=(100,))
+    mlp = MLPClassifier(hidden_layer_sizes=(500,), max_iter=1000)
+    mlp.fit(train_features, train_labels)
+    print(mlp.score(test_features, test_labels))
+
+
+def knn(train_features, test_features, train_labels, test_labels):
+    mlp = KNeighborsClassifier()
     mlp.fit(train_features, train_labels)
     print(mlp.score(test_features, test_labels))
 
 
 def main():
-    # dataset = load_dataset('datasets/dataset_5SecondWindow.csv')
-    # train_features, test_features, train_labels, test_labels = preprocessing(dataset)
-    # rf_std(train_features, test_features, train_labels, test_labels)
     sensors = ['android.sensor.accelerometer', 'android.sensor.gravity', 'android.sensor.gyroscope_uncalibrated']
+    sensors = ['android.sensor.accelerometer', 'android.sensor.gyroscope', 'android.sensor.magnetic_field']
+    # dataset = load_dataset('datasets/dataset_5SecondWindow.csv', sensors=sensors)
+    # train_features, test_features, train_labels, test_labels = preprocessing(dataset)
+    # knn(train_features, test_features, train_labels, test_labels)
+
     dataset = SensorDataset(filename='datasets/dataset_5secondWindow.csv', sensors=sensors)
 
     train_indices, test_indices, _, _ = train_test_split(
@@ -141,6 +149,8 @@ def main():
             total += labels.shape[0]
         accuracy = correct / total * 100
         print(f'Accuracy of the model  {accuracy:.2f}%')
+
+    torch.save(model.state_dict(), 'checkpoints/tmd_classifier.pt')
 
 
 if __name__ == '__main__':

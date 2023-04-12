@@ -7,6 +7,10 @@ class TMDFeatures {
   final double gyroscopeMax;
   final double gyroscopeMean;
   final double gyroscopeStd;
+  final double magnetometerMin;
+  final double magnetometerMax;
+  final double magnetometerMean;
+  final double magnetometerStd;
 
   const TMDFeatures({
     this.accelerometerMin = 0,
@@ -17,10 +21,9 @@ class TMDFeatures {
     this.gyroscopeMax = 0,
     this.gyroscopeMean = 0,
     this.gyroscopeStd = 0,
+    this.magnetometerMin = 0,
+    this.magnetometerMax = 0,
+    this.magnetometerMean = 0,
+    this.magnetometerStd = 0,
   });
-
-  @override
-  String toString() {
-    return 'TMDFeatures{accelerometerMin: $accelerometerMin, accelerometerMax: $accelerometerMax, accelerometerMean: $accelerometerMean, accelerometerStd: $accelerometerStd, gyroscopeMin: $gyroscopeMin, gyroscopeMax: $gyroscopeMax, gyroscopeMean: $gyroscopeMean, gyroscopeStd: $gyroscopeStd}';
-  }
 }
