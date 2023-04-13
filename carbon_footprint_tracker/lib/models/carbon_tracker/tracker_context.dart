@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pytorch_mobile/model.dart';
+import 'package:sklite/ensemble/forest.dart';
+import 'package:sklite/utils/io.dart';
 
 import '../carbon_activity/constants/transport_mode.dart';
 
@@ -11,23 +16,28 @@ class TrackerContext {
   Position? startPosition;
   Position? latestPosition;
   double distance;
+  String? tmdModelPath;
+  Model? tmdModel;
+  RandomForestClassifier? rf;
   List<TransportMode> vehicleHistory;
-  List<double> accelerometerWindow;
-  DateTime accelerometerWindowStartTime;
-  int accelerometerWindowSize;
 
   TrackerContext({
     DateTime? currentActivityStartTime,
     List<TransportMode>? vehicleHistory,
-    List<double>? accelerometerWindow,
-    DateTime? accelerometerWindowStartTime,
     this.distance = 0,
-    this.accelerometerWindowSize = 1,
+    this.tmdModelPath,
   })  : startTime = currentActivityStartTime ?? DateTime.now(),
-        vehicleHistory = vehicleHistory ?? [],
-        accelerometerWindow = accelerometerWindow ?? [],
-        accelerometerWindowStartTime =
-            accelerometerWindowStartTime ?? DateTime.now();
+        vehicleHistory = vehicleHistory ?? [] {
+    _loadModel();
+  }
+
+  Future<void> _loadModel() async {
+    if (tmdModelPath == null) return;
+    await loadModel(tmdModelPath!).then((x) {
+      rf = RandomForestClassifier.fromMap(json.decode(x));
+    });
+    // tmdModel = await PyTorchMobile.loadModel(tmdModelPath!);
+  }
 
   Future<void> setStartPosition() async {
     startPosition = await Geolocator.getCurrentPosition();
@@ -56,7 +66,21 @@ class TrackerContext {
     distance += newDistance;
   }
 
-  void handleAcc(TMDSensorEvent event) {
-    print(event.features);
+  void transportModeDetection(TMDSensorEvent event) async {
+    if (rf == null) return;
+
+    final vehicles = [
+      TransportMode.car,
+      TransportMode.bus,
+      TransportMode.train
+    ];
+
+    final prediction = rf!.predict(event.features.input);
+    print(vehicles[prediction].name);
+    vehicleHistory.add(vehicles[prediction]);
+
+    // final prediction =
+    //     await tmdModel!.getPrediction(event.features.input, [1, 12], DType.float32);
+    // print(prediction);
   }
 }

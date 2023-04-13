@@ -24,7 +24,7 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
 
   final tracker = CarbonTracker(
     machine: Machine<TrackerState>(),
-    context: TrackerContext(),
+    context: TrackerContext(tmdModelPath: 'assets/models/tmd_rf.json'),
     eventStream: eventStream,
     store: store,
   );

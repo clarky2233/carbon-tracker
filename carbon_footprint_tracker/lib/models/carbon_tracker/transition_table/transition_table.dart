@@ -23,7 +23,7 @@ class TransitionTable {
     Transition(currentState: const IdleState(),     event: RunningEvent()):                 TransitionResult(nextState: const WalkingState(), autoCreateActivity: false),
     Transition(currentState: const IdleState(),     event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState(), autoCreateActivity: false),
     Transition(currentState: const IdleState(),     event: InVehicleEvent()):               TransitionResult(nextState: const VehicleState(), autoCreateActivity: false),
-    Transition(currentState: const IdleState(),     event: TMDSensorEvent()):       TransitionResult(nextState: const IdleState(), action: (context, event) => context.handleAcc(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
+    Transition(currentState: const IdleState(),     event: TMDSensorEvent()):       TransitionResult(nextState: const IdleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
 
     // Walking
     Transition(currentState: const WalkingState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState()),
@@ -44,7 +44,7 @@ class TransitionTable {
     Transition(currentState: const VehicleState(),  event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState()),
     Transition(currentState: const VehicleState(),  event: PositionUpdateEvent()):          TransitionResult(nextState: const VehicleState(), action: (context, event) => context.updateDistance(event as PositionUpdateEvent), resetContext: false, autoCreateActivity: false),
     Transition(currentState: const VehicleState(),  event: HighAltitudeAndSpeedEvent()):    TransitionResult(nextState: const FlyingState(),  resetContext: false, autoCreateActivity: false),
-    Transition(currentState: const VehicleState(),  event: TMDSensorEvent()):       TransitionResult(nextState: const VehicleState(), action: (context, event) => context.handleAcc(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
+    Transition(currentState: const VehicleState(),  event: TMDSensorEvent()):       TransitionResult(nextState: const VehicleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
 
     // Flying
     Transition(currentState: const FlyingState(),  event: StillEvent()):                    TransitionResult(nextState: const IdleState()),

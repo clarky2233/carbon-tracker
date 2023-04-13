@@ -6,14 +6,17 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, GridSearchCV
 from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from torch import nn
 from torch.utils.data import DataLoader, SubsetRandomSampler, Subset
+from torch.utils.mobile_optimizer import optimize_for_mobile
 
 from dataset import SensorDataset
 from tmd import TMD
+
+from sklite import LazyExport
 
 
 def load_dataset(filename: str, sensors: list[str]):
@@ -25,6 +28,9 @@ def load_dataset(filename: str, sensors: list[str]):
 
     dataset = pd.read_csv(filename, usecols=cols)
     dataset = dataset[dataset['target'].isin(targets)].dropna()
+
+    label_encoder = LabelEncoder()
+    dataset['target'] = label_encoder.fit_transform(dataset['target'])
 
     return dataset
 
@@ -75,6 +81,7 @@ def rf_std(train_features, test_features, train_labels, test_labels):
     rf = RandomForestClassifier()
     rf.fit(train_features, train_labels)
     print(rf.score(test_features, test_labels))
+    return rf
 
 
 def mlp_classifier(train_features, test_features, train_labels, test_labels):
@@ -92,9 +99,14 @@ def knn(train_features, test_features, train_labels, test_labels):
 def main():
     sensors = ['android.sensor.accelerometer', 'android.sensor.gravity', 'android.sensor.gyroscope_uncalibrated']
     sensors = ['android.sensor.accelerometer', 'android.sensor.gyroscope', 'android.sensor.magnetic_field']
-    # dataset = load_dataset('datasets/dataset_5SecondWindow.csv', sensors=sensors)
-    # train_features, test_features, train_labels, test_labels = preprocessing(dataset)
-    # knn(train_features, test_features, train_labels, test_labels)
+    dataset = load_dataset('datasets/dataset_5SecondWindow.csv', sensors=sensors)
+    train_features, test_features, train_labels, test_labels = preprocessing(dataset)
+    clf = rf_std(train_features, test_features, train_labels, test_labels)
+
+    lazy = LazyExport(clf)
+    lazy.save('checkpoints/tmd_rf.json')
+
+    return
 
     dataset = SensorDataset(filename='datasets/dataset_5secondWindow.csv', sensors=sensors)
 
@@ -108,7 +120,7 @@ def main():
     test_split = Subset(dataset, test_indices)
 
     batch_size = 64
-    epochs = 1000
+    epochs = 10
     lr = 0.001
 
     train_loader = DataLoader(train_split, batch_size=batch_size, shuffle=True)
@@ -144,13 +156,18 @@ def main():
         correct = 0
         total = 0
         for features, labels in test_loader:
+            print(features.shape)
             output = model(features)
             correct += torch.sum(torch.argmax(output, dim=1) == labels)
             total += labels.shape[0]
         accuracy = correct / total * 100
         print(f'Accuracy of the model  {accuracy:.2f}%')
 
-    torch.save(model.state_dict(), 'checkpoints/tmd_classifier.pt')
+    example = torch.rand(1, len(sensors) * 4)
+    traced_script_module = torch.jit.trace(model, example)
+    traced_script_module_optimized = optimize_for_mobile(traced_script_module)
+    traced_script_module_optimized._save_for_lite_interpreter('checkpoints/tmd_classifier2.pt')
+    # torch.save(model, 'checkpoints/tmd_classifier.pt')
 
 
 if __name__ == '__main__':

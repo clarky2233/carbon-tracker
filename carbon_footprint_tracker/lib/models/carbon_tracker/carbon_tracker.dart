@@ -23,9 +23,6 @@ class CarbonTracker {
   late Box<CarbonActivitySchema> activityBox;
   late Box<EventLog> eventBox;
 
-  // Ref ref;
-  // T Function<T>(ProviderListenable<T>) read;
-
   static const List<TrackerState> _defaultStates = [
     IdleState(),
     WalkingState(),

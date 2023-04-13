@@ -26,4 +26,19 @@ class TMDFeatures {
     this.magnetometerMean = 0,
     this.magnetometerStd = 0,
   });
+
+  List<double> get input => [
+        accelerometerMin,
+        accelerometerMax,
+        accelerometerMean,
+        accelerometerStd,
+        gyroscopeMin,
+        gyroscopeMax,
+        gyroscopeMean,
+        gyroscopeStd,
+        magnetometerMin,
+        magnetometerMax,
+        magnetometerMean,
+        magnetometerStd,
+      ];
 }
