@@ -1,3 +1,5 @@
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/widgets/fuel_type_details.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/widgets/vehicle_size_details.dart';
@@ -11,8 +13,9 @@ class DetailsInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final noShow = ref.watch(newTripProvider.select(
-        (value) => value.vehicleSize == null && value.fuelType == null));
+    final noShow = ref.watch(newTripProvider.select((value) =>
+        value.vehicleSize == VehicleSize.none &&
+        value.fuelType == FuelType.none));
 
     if (noShow) return const SizedBox();
 

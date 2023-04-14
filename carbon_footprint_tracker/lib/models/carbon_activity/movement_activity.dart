@@ -1,7 +1,6 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/screens/activity/movement_activity/movement_activity_screen.dart';
 import 'package:carbon_footprint_tracker/screens/activity_history/widgets/movement_activity_tile.dart';
 import 'package:carbon_footprint_tracker/utils/emission_factor.dart';
@@ -18,7 +17,6 @@ class MovementActivity implements CarbonActivity {
   int id;
 
   @override
-  @Transient()
   Serializer serializer;
 
   DateTime startedAt;
@@ -46,8 +44,8 @@ class MovementActivity implements CarbonActivity {
   double distance;
 
   TransportMode transportMode;
-  FuelType? fuelType;
-  VehicleSize? vehicleSize;
+  FuelType fuelType;
+  VehicleSize vehicleSize;
 
   MovementActivity({
     this.id = 0,
@@ -70,8 +68,8 @@ class MovementActivity implements CarbonActivity {
     required this.endCountry,
     required this.endPostcode,
     required this.endSubLocality,
-    required this.vehicleSize,
-    required this.fuelType,
+    this.vehicleSize = VehicleSize.none,
+    this.fuelType = FuelType.none,
     required this.transportMode,
   });
 
@@ -296,8 +294,8 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
       endCountry: schema.endCountry,
       endPostcode: schema.endPostcode,
       endSubLocality: schema.endSubLocality,
-      vehicleSize: schema.vehicleSize,
-      fuelType: schema.fuelType,
+      vehicleSize: schema.vehicleSize ?? VehicleSize.none,
+      fuelType: schema.fuelType ?? FuelType.none,
       transportMode: schema.transportMode!,
     );
   }

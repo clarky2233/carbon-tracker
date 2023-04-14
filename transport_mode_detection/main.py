@@ -21,7 +21,7 @@ from sklite import LazyExport
 
 def load_dataset(filename: str, sensors: list[str]):
     measures = ['mean', 'min', 'max', 'std']
-    targets = ['Car', 'Bus', 'Train']
+    targets = ['Bus', 'Car', 'Train']
 
     cols = [f'{sensor}#{measure}' for sensor in sensors for measure in measures]
     cols.append('target')
@@ -39,12 +39,12 @@ def preprocessing(dataset: DataFrame):
     features, labels = dataset.iloc[:, :-1], dataset.iloc[:, -1]
     X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels)
 
-    scaler = MinMaxScaler()
-    scaler.fit(X_train)
-    X_train_norm = scaler.transform(X_train)
-    X_test_norm = scaler.transform(X_test)
+    # scaler = MinMaxScaler()
+    # scaler.fit(X_train)
+    # X_train_norm = scaler.transform(X_train)
+    # X_test_norm = scaler.transform(X_test)
 
-    return X_train_norm, X_test_norm, y_train, y_test
+    return X_train, X_test, y_train, y_test
 
 
 def svm_classifier(train_features, test_features, train_labels, test_labels):
@@ -78,7 +78,7 @@ def rf_classifier(train_features, test_features, train_labels, test_labels):
 
 
 def rf_std(train_features, test_features, train_labels, test_labels):
-    rf = RandomForestClassifier()
+    rf = RandomForestClassifier(bootstrap=False, n_estimators=200)
     rf.fit(train_features, train_labels)
     print(rf.score(test_features, test_labels))
     return rf
@@ -97,77 +97,73 @@ def knn(train_features, test_features, train_labels, test_labels):
 
 
 def main():
-    sensors = ['android.sensor.accelerometer', 'android.sensor.gravity', 'android.sensor.gyroscope_uncalibrated']
     sensors = ['android.sensor.accelerometer', 'android.sensor.gyroscope', 'android.sensor.magnetic_field']
     dataset = load_dataset('datasets/dataset_5SecondWindow.csv', sensors=sensors)
     train_features, test_features, train_labels, test_labels = preprocessing(dataset)
     clf = rf_std(train_features, test_features, train_labels, test_labels)
 
     lazy = LazyExport(clf)
-    lazy.save('checkpoints/tmd_rf.json')
+    lazy.save('checkpoints/tmd_rf.json', force_override=True)
 
-    return
-
-    dataset = SensorDataset(filename='datasets/dataset_5secondWindow.csv', sensors=sensors)
-
-    train_indices, test_indices, _, _ = train_test_split(
-        range(len(dataset)),
-        dataset.targets,
-        stratify=dataset.targets,
-    )
-
-    train_split = Subset(dataset, train_indices)
-    test_split = Subset(dataset, test_indices)
-
-    batch_size = 64
-    epochs = 10
-    lr = 0.001
-
-    train_loader = DataLoader(train_split, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_split, batch_size=batch_size)
-
-    model = TMD(input_dim=len(sensors) * 4, output_dim=3)
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-
-    model.train()
-    for epoch in range(epochs):
-        for batch, (images, labels) in enumerate(train_loader):
-            # forward pass
-            output = model(images)
-
-            # loss
-            loss = loss_fn(output, labels)
-
-            # zero gradients
-            optimizer.zero_grad()
-
-            # gradient
-            loss.backward()
-
-            # update weights
-            optimizer.step()
-        if epoch % 10 == 0:
-            print(f'Epochs [{epoch + 1}/{epochs}], Losses: {loss.item():.4f}')
-
-    print("=======\nTESTING\n=======")
-    model.eval()
-    with torch.no_grad():
-        correct = 0
-        total = 0
-        for features, labels in test_loader:
-            print(features.shape)
-            output = model(features)
-            correct += torch.sum(torch.argmax(output, dim=1) == labels)
-            total += labels.shape[0]
-        accuracy = correct / total * 100
-        print(f'Accuracy of the model  {accuracy:.2f}%')
-
-    example = torch.rand(1, len(sensors) * 4)
-    traced_script_module = torch.jit.trace(model, example)
-    traced_script_module_optimized = optimize_for_mobile(traced_script_module)
-    traced_script_module_optimized._save_for_lite_interpreter('checkpoints/tmd_classifier2.pt')
-    # torch.save(model, 'checkpoints/tmd_classifier.pt')
+    # dataset = SensorDataset(filename='datasets/dataset_5secondWindow.csv', sensors=sensors)
+    #
+    # train_indices, test_indices, _, _ = train_test_split(
+    #     range(len(dataset)),
+    #     dataset.targets,
+    #     stratify=dataset.targets,
+    # )
+    #
+    # train_split = Subset(dataset, train_indices)
+    # test_split = Subset(dataset, test_indices)
+    #
+    # batch_size = 64
+    # epochs = 10
+    # lr = 0.001
+    #
+    # train_loader = DataLoader(train_split, batch_size=batch_size, shuffle=True)
+    # test_loader = DataLoader(test_split, batch_size=batch_size)
+    #
+    # model = TMD(input_dim=len(sensors) * 4, output_dim=3)
+    # loss_fn = nn.CrossEntropyLoss()
+    # optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    #
+    # model.train()
+    # for epoch in range(epochs):
+    #     for batch, (images, labels) in enumerate(train_loader):
+    #         # forward pass
+    #         output = model(images)
+    #
+    #         # loss
+    #         loss = loss_fn(output, labels)
+    #
+    #         # zero gradients
+    #         optimizer.zero_grad()
+    #
+    #         # gradient
+    #         loss.backward()
+    #
+    #         # update weights
+    #         optimizer.step()
+    #     if epoch % 10 == 0:
+    #         print(f'Epochs [{epoch + 1}/{epochs}], Losses: {loss.item():.4f}')
+    #
+    # print("=======\nTESTING\n=======")
+    # model.eval()
+    # with torch.no_grad():
+    #     correct = 0
+    #     total = 0
+    #     for features, labels in test_loader:
+    #         print(features.shape)
+    #         output = model(features)
+    #         correct += torch.sum(torch.argmax(output, dim=1) == labels)
+    #         total += labels.shape[0]
+    #     accuracy = correct / total * 100
+    #     print(f'Accuracy of the model  {accuracy:.2f}%')
+    #
+    # example = torch.rand(1, len(sensors) * 4)
+    # traced_script_module = torch.jit.trace(model, example)
+    # traced_script_module_optimized = optimize_for_mobile(traced_script_module)
+    # traced_script_module_optimized._save_for_lite_interpreter('checkpoints/tmd_classifier2.pt')
 
 
 if __name__ == '__main__':

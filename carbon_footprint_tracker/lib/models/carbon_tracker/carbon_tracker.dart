@@ -90,6 +90,9 @@ class CarbonTracker {
 
     // Change State
     if (transitionResult.nextState != state.identifier) {
+      if (transitionResult.nextState.transportMode != null) {
+        context.transportMode = transitionResult.nextState.transportMode!;
+      }
       _registeredStates[transitionResult.nextState]?.enter();
     }
   }
@@ -131,7 +134,7 @@ class CarbonTracker {
       endPostcode: endPlacemark?.postalCode,
       endSubLocality: endPlacemark?.subLocality,
       distance: context.distance,
-      transportMode: state.transportMode,
+      transportMode: context.transportMode,
     );
 
     // Combine Activity

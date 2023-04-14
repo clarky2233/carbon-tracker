@@ -28,7 +28,7 @@ class FuelTypeQuestion extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ...FuelType.values.map((type) {
+        ...FuelType.options.map((type) {
           return CheckboxListTile(
             enabled: enabled,
             secondary: Icon(type.icon),

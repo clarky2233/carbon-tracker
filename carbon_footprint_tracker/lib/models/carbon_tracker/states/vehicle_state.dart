@@ -12,7 +12,7 @@ class VehicleState extends TrackerState {
   final String name = "vehicle";
 
   @override
-  TransportMode? get transportMode => TransportMode.car;
+  TransportMode get transportMode => TransportMode.car;
 
   @override
   bool filter(TrackerContext context) {

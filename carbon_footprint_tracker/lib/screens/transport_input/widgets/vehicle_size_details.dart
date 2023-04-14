@@ -1,3 +1,4 @@
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/widgets/vehicle_size_selection.dart';
 import 'package:carbon_footprint_tracker/utils/extensions.dart';
@@ -16,7 +17,7 @@ class VehicleSizeDetails extends ConsumerWidget {
     final icon = ref.watch(
         newTripProvider.select((value) => value.transportMode.iconOutlined));
 
-    if (size == null) return const SizedBox();
+    if (size == VehicleSize.none) return const SizedBox();
 
     return ListTile(
       leading: Icon(icon),

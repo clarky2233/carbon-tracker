@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
+import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pytorch_mobile/model.dart';
 import 'package:sklite/ensemble/forest.dart';
 import 'package:sklite/utils/io.dart';
 
@@ -16,18 +16,20 @@ class TrackerContext {
   Position? startPosition;
   Position? latestPosition;
   double distance;
+  double distanceThreshold;
   String? tmdModelPath;
-  Model? tmdModel;
   RandomForestClassifier? rf;
-  List<TransportMode> vehicleHistory;
+  Map<TransportMode, int> vehiclePrediction;
+  late TransportMode transportMode;
 
   TrackerContext({
     DateTime? currentActivityStartTime,
-    List<TransportMode>? vehicleHistory,
+    Map<TransportMode, int>? vehiclePrediction,
     this.distance = 0,
+    this.distanceThreshold = 50,
     this.tmdModelPath,
   })  : startTime = currentActivityStartTime ?? DateTime.now(),
-        vehicleHistory = vehicleHistory ?? [] {
+        vehiclePrediction = vehiclePrediction ?? {} {
     _loadModel();
   }
 
@@ -63,24 +65,30 @@ class TrackerContext {
       event.position!.longitude,
     );
 
+    if (newDistance < distanceThreshold) return;
+
     distance += newDistance;
   }
 
-  void transportModeDetection(TMDSensorEvent event) async {
+  void transportModeDetection(TMDSensorEvent event) {
     if (rf == null) return;
 
     final vehicles = [
-      TransportMode.car,
       TransportMode.bus,
-      TransportMode.train
+      TransportMode.car,
+      TransportMode.train,
     ];
 
     final prediction = rf!.predict(event.features.input);
-    print(vehicles[prediction].name);
-    vehicleHistory.add(vehicles[prediction]);
 
-    // final prediction =
-    //     await tmdModel!.getPrediction(event.features.input, [1, 12], DType.float32);
-    // print(prediction);
+    vehiclePrediction.update(
+      vehicles[prediction],
+      (value) => ++value,
+      ifAbsent: () => 1,
+    );
+  }
+
+  void assignVehicle() {
+    transportMode = vehiclePrediction.max() ?? TransportMode.car;
   }
 }

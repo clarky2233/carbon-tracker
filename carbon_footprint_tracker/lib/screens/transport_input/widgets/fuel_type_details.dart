@@ -1,3 +1,4 @@
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,9 +12,9 @@ class FuelTypeDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fuel = ref.watch(newTripProvider.select((value) => value.fuelType));
     final icon =
-        ref.watch(newTripProvider.select((value) => value.fuelType?.icon));
+        ref.watch(newTripProvider.select((value) => value.fuelType.icon));
 
-    if (fuel == null) return const SizedBox();
+    if (fuel == FuelType.none) return const SizedBox();
 
     return ListTile(
       leading: Icon(icon),

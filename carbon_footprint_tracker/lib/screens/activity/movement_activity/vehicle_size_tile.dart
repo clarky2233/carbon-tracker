@@ -3,6 +3,7 @@ import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../models/carbon_activity/constants/vehicle_size.dart';
 import '../../../models/carbon_activity/movement_activity.dart';
 
 class VehicleSizeTile extends ConsumerWidget {
@@ -15,11 +16,11 @@ class VehicleSizeTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (activity.vehicleSize == null) return const SizedBox();
+    if (activity.vehicleSize == VehicleSize.none) return const SizedBox();
 
     return ListTile(
       leading: Icon(activity.transportMode.iconOutlined),
-      title: Text(activity.vehicleSize?.name.capitalize() ?? "None"),
+      title: Text(activity.vehicleSize.name.capitalize()),
       subtitle: const Text("Vehicle Size"),
       trailing: IgnorePointer(
         child: IconButton(

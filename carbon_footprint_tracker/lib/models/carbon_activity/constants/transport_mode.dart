@@ -30,17 +30,30 @@ enum TransportMode {
   cycling(
     icon: Icons.directions_bike,
     iconOutlined: Icons.directions_bike_outlined,
+  ),
+  flying(
+    icon: Icons.airplanemode_active,
+    iconOutlined: Icons.airplanemode_active_outlined,
   );
 
   final IconData icon;
   final IconData iconOutlined;
-  final FuelType? defaultFuelType;
-  final VehicleSize? defaultVehicleSize;
+  final FuelType defaultFuelType;
+  final VehicleSize defaultVehicleSize;
+
+  static List<TransportMode> groundVehicles = const [
+    car,
+    bus,
+    train,
+    motorbike,
+    walking,
+    cycling,
+  ];
 
   const TransportMode({
     required this.icon,
     required this.iconOutlined,
-    this.defaultFuelType,
-    this.defaultVehicleSize,
+    this.defaultFuelType = FuelType.none,
+    this.defaultVehicleSize = VehicleSize.none,
   });
 }

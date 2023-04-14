@@ -29,9 +29,9 @@ class FuelTypeSelection extends ConsumerWidget {
           const Divider(height: 32),
           Expanded(
             child: ListView.builder(
-              itemCount: FuelType.values.length,
+              itemCount: FuelType.options.length,
               itemBuilder: (context, i) {
-                final item = FuelType.values[i];
+                final item = FuelType.options[i];
 
                 return CheckboxListTile(
                   secondary: Icon(item.icon),

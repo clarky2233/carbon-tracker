@@ -1,3 +1,4 @@
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
 import 'package:carbon_footprint_tracker/screens/activity/movement_activity/update_fuel_type_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,11 +15,11 @@ class FuelTypeTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (activity.fuelType == null) return const SizedBox();
+    if (activity.fuelType == FuelType.none) return const SizedBox();
 
     return ListTile(
-      leading: Icon(activity.fuelType!.icon),
-      title: Text(activity.fuelType?.text ?? "None"),
+      leading: Icon(activity.fuelType.icon),
+      title: Text(activity.fuelType.text),
       subtitle: const Text("Fuel Type"),
       trailing: IgnorePointer(
         child: IconButton(

@@ -49,6 +49,7 @@ class UpdateTransportModeBottomSheet extends ConsumerWidget {
                 return CheckboxListTile(
                   value: selectedItem == item,
                   title: Text(item.name.capitalize()),
+                  secondary: Icon(item.icon),
                   onChanged: (_) {
                     notifier.state = item;
                     store.box<CarbonActivitySchema>().put(

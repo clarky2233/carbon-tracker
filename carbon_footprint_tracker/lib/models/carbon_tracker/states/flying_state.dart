@@ -12,8 +12,7 @@ class FlyingState extends TrackerState {
   final String name = "flying";
 
   @override
-  //TODO: fix this
-  TransportMode? get transportMode => null;
+  TransportMode? get transportMode => TransportMode.flying;
 
   @override
   bool filter(TrackerContext context) {

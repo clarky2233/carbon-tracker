@@ -9,8 +9,8 @@ import '../carbon_tracker/events/tracker_event.dart';
 
 class Geo {
   static Stream<TrackerEvent> get stream {
-    const distanceFilter = 25; // meters
-    const minPositionAccuracy = 10; // percent
+    const distanceFilter = 50; // meters
+    const minPositionAccuracy = 50; // percent
     const flyingAltitude = 300; // meters
     const flyingSpeed = 55; // meters/second
 

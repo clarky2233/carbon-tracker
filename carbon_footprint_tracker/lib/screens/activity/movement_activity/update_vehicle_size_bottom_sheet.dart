@@ -41,9 +41,9 @@ class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
           const Divider(height: 32),
           Expanded(
             child: ListView.builder(
-              itemCount: VehicleSize.values.length,
+              itemCount: VehicleSize.options.length,
               itemBuilder: (context, i) {
-                final item = VehicleSize.values[i];
+                final item = VehicleSize.options[i];
 
                 return CheckboxListTile(
                   value: selectedItem == item,

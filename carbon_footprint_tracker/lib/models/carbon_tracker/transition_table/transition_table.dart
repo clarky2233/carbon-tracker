@@ -11,7 +11,6 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/idle_state
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/transition_table/transition.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/transition_table/transition_result.dart';
-
 import '../events/in_vehicle_event.dart';
 import '../events/walking_event.dart';
 
@@ -23,8 +22,7 @@ class TransitionTable {
     Transition(currentState: const IdleState(),     event: RunningEvent()):                 TransitionResult(nextState: const WalkingState(), autoCreateActivity: false),
     Transition(currentState: const IdleState(),     event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState(), autoCreateActivity: false),
     Transition(currentState: const IdleState(),     event: InVehicleEvent()):               TransitionResult(nextState: const VehicleState(), autoCreateActivity: false),
-    Transition(currentState: const IdleState(),     event: TMDSensorEvent()):       TransitionResult(nextState: const IdleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
-
+    // Transition(currentState: const IdleState(),     event: TMDSensorEvent()):               TransitionResult(nextState: const IdleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
     // Walking
     Transition(currentState: const WalkingState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState()),
     Transition(currentState: const WalkingState(),  event: RunningEvent()):                 TransitionResult(nextState: const WalkingState(), resetContext: false),
@@ -37,15 +35,14 @@ class TransitionTable {
     Transition(currentState: const CyclingState(),  event: RunningEvent()):                 TransitionResult(nextState: const WalkingState()),
     Transition(currentState: const CyclingState(),  event: InVehicleEvent()):               TransitionResult(nextState: const VehicleState()),
     Transition(currentState: const CyclingState(),  event: PositionUpdateEvent()):          TransitionResult(nextState: const CyclingState(), action: (context, event) => context.updateDistance(event as PositionUpdateEvent), resetContext: false, autoCreateActivity: false),
-    // Driving
-    Transition(currentState: const VehicleState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState()),
-    Transition(currentState: const VehicleState(),  event: WalkingEvent()):                 TransitionResult(nextState: const WalkingState()),
-    Transition(currentState: const VehicleState(),  event: RunningEvent()):                 TransitionResult(nextState: const WalkingState()),
-    Transition(currentState: const VehicleState(),  event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState()),
-    Transition(currentState: const VehicleState(),  event: PositionUpdateEvent()):          TransitionResult(nextState: const VehicleState(), action: (context, event) => context.updateDistance(event as PositionUpdateEvent), resetContext: false, autoCreateActivity: false),
+    // Vehicle
+    Transition(currentState: const VehicleState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState(),    action: (context, _) => context.assignVehicle()),
+    Transition(currentState: const VehicleState(),  event: WalkingEvent()):                 TransitionResult(nextState: const WalkingState(), action: (context, _) => context.assignVehicle()),
+    Transition(currentState: const VehicleState(),  event: RunningEvent()):                 TransitionResult(nextState: const WalkingState(), action: (context, _) => context.assignVehicle()),
+    Transition(currentState: const VehicleState(),  event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState(), action: (context, _) => context.assignVehicle()),
     Transition(currentState: const VehicleState(),  event: HighAltitudeAndSpeedEvent()):    TransitionResult(nextState: const FlyingState(),  resetContext: false, autoCreateActivity: false),
-    Transition(currentState: const VehicleState(),  event: TMDSensorEvent()):       TransitionResult(nextState: const VehicleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
-
+    Transition(currentState: const VehicleState(),  event: PositionUpdateEvent()):          TransitionResult(nextState: const VehicleState(), action: (context, event) => context.updateDistance(event as PositionUpdateEvent), resetContext: false, autoCreateActivity: false),
+    Transition(currentState: const VehicleState(),  event: TMDSensorEvent()):               TransitionResult(nextState: const VehicleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
     // Flying
     Transition(currentState: const FlyingState(),  event: StillEvent()):                    TransitionResult(nextState: const IdleState()),
     Transition(currentState: const FlyingState(),  event: WalkingEvent()):                  TransitionResult(nextState: const WalkingState()),
