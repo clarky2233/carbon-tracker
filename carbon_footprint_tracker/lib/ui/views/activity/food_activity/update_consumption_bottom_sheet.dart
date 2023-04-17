@@ -1,18 +1,10 @@
-import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/food_consumption.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
-import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/ui/widgets/bottom_sheet_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final updateFoodConsumptionProvider =
-    StateProvider.autoDispose.family<FoodConsumption, int>((ref, id) {
-  final box = store.box<CarbonActivitySchema>();
-  final activity = box.get(id)!.toActivity() as FoodActivity;
-  return activity.foodConsumption;
-});
+import '../activity_view_controller.dart';
 
 class UpdateConsumptionBottomSheet extends ConsumerWidget {
   final FoodActivity activity;
@@ -24,9 +16,10 @@ class UpdateConsumptionBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedItem = ref.watch(updateFoodConsumptionProvider(activity.id));
-    final notifier =
-        ref.read(updateFoodConsumptionProvider(activity.id).notifier);
+    final selectedItem = ref.watch(activityViewControllerProvider(activity)
+        .select((value) => (value as FoodActivity).foodConsumption));
+    final controller =
+        ref.read(activityViewControllerProvider(activity).notifier);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.55,
@@ -49,11 +42,7 @@ class UpdateConsumptionBottomSheet extends ConsumerWidget {
                   value: selectedItem == item,
                   title: Text(item.text),
                   onChanged: (_) {
-                    notifier.state = item;
-                    store.box<CarbonActivitySchema>().put(
-                          (activity..foodConsumption = item).toDB(),
-                          mode: PutMode.update,
-                        );
+                    controller.updateFoodConsumption(item);
                   },
                 );
               },

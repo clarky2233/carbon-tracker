@@ -1,10 +1,10 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
-import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity/activity_view_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class DeleteActivityButton extends StatelessWidget {
+class DeleteActivityButton extends ConsumerWidget {
   final CarbonActivity activity;
 
   const DeleteActivityButton({
@@ -13,7 +13,10 @@ class DeleteActivityButton extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller =
+        ref.watch(activityViewControllerProvider(activity).notifier);
+
     return IconButton(
       onPressed: () async {
         final shouldDelete = await showDialog<bool?>(
@@ -23,8 +26,7 @@ class DeleteActivityButton extends StatelessWidget {
             false;
 
         if (shouldDelete) {
-          final activityBox = store.box<CarbonActivitySchema>();
-          activityBox.remove(activity.id);
+          controller.deleteActivity();
           if (context.mounted) context.pop();
         }
       },

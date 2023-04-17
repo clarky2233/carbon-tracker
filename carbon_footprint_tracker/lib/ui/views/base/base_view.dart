@@ -4,26 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../ui/views/activity_history/activity_history_view.dart';
-import '../../ui/views/settings/settings_view.dart';
+import '../activity_history/activity_history_view.dart';
+import '../settings/settings_view.dart';
+import 'base_view_controller.dart';
 
-final selectedIndexProvider = StateProvider.autoDispose<int>((ref) {
-  return 0;
-});
-
-class BaseScaffold extends ConsumerStatefulWidget {
+class BaseView extends ConsumerStatefulWidget {
   final Widget child;
 
-  const BaseScaffold({
+  const BaseView({
     Key? key,
     required this.child,
   }) : super(key: key);
 
   @override
-  ConsumerState<BaseScaffold> createState() => _BaseScaffoldState();
+  ConsumerState<BaseView> createState() => _BaseScaffoldState();
 }
 
-class _BaseScaffoldState extends ConsumerState<BaseScaffold> {
+class _BaseScaffoldState extends ConsumerState<BaseView> {
   final List<NamedRoute> _routes = [
     NamedRoute.home,
     NamedRoute.activityHistory,

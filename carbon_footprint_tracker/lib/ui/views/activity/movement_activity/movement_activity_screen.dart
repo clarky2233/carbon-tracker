@@ -1,15 +1,15 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
-import 'package:carbon_footprint_tracker/screens/activity/movement_activity/fuel_type_tile.dart';
-import 'package:carbon_footprint_tracker/screens/activity/movement_activity/transport_mode_tile.dart';
-import 'package:carbon_footprint_tracker/screens/activity/movement_activity/vehicle_size_tile.dart';
-import 'package:carbon_footprint_tracker/screens/activity/widgets/no_emissions_factor_alert.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity/movement_activity/transport_mode_tile.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity/movement_activity/vehicle_size_tile.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/activity_title.dart';
 import '../widgets/delete_activity_button.dart';
+import '../widgets/no_emissions_factor_alert.dart';
 import 'activity_details_tile.dart';
 import 'activity_end_tile.dart';
 import 'activity_start_tile.dart';
+import 'fuel_type_tile.dart';
 
 class MovementActivityScreen extends StatelessWidget {
   final MovementActivity activity;

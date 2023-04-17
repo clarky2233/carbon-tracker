@@ -17,4 +17,38 @@ class ActivityServiceObjectBox implements ActivityService {
     yield* query.watch(triggerImmediately: true).map((query) =>
         query.find().map<CarbonActivity>((e) => e.toActivity()).toList());
   }
+
+  @override
+  Stream<CarbonActivity?> getActivityStream(int id) async* {
+    yield* store
+        .box<CarbonActivitySchema>()
+        .query(CarbonActivitySchema_.id.equals(id))
+        .watch(triggerImmediately: true)
+        .map((query) {
+      final activity = query.find().map((e) => e.toActivity());
+      if (activity.isEmpty) return null;
+      return activity.first;
+    });
+  }
+
+  @override
+  void deleteActivity(int id) {
+    final activityBox = store.box<CarbonActivitySchema>();
+    activityBox.remove(id);
+  }
+
+  @override
+  CarbonActivity? getActivity(int id) {
+    final box = store.box<CarbonActivitySchema>();
+    final activity = box.get(id)?.toActivity();
+    return activity;
+  }
+
+  @override
+  void updateActivity(CarbonActivity activity) {
+    store.box<CarbonActivitySchema>().put(
+          activity.toDB(),
+          mode: PutMode.update,
+        );
+  }
 }

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:carbon_footprint_tracker/navigation/named_route.dart';
-import 'package:carbon_footprint_tracker/screens/activity/activity_screen.dart';
-import 'package:carbon_footprint_tracker/screens/base/base_scaffold.dart';
 import 'package:carbon_footprint_tracker/screens/food_input/food_input_screen.dart';
 import 'package:carbon_footprint_tracker/screens/questionnaire/questionnaire_screen.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
@@ -11,7 +9,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../models/object_box/object_box.dart';
 import '../../models/user_info/user_info.dart';
+import '../ui/views/activity/activity_view.dart';
 import '../ui/views/activity_history/activity_history_view.dart';
+import '../ui/views/base/base_view.dart';
 import '../ui/views/home/home_view.dart';
 import '../ui/views/settings/settings_view.dart';
 import '../ui/views/settings/views/tracking_settings/tracking_settings_view.dart';
@@ -37,7 +37,7 @@ final router = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) =>
-          BaseScaffold(key: state.pageKey, child: child),
+          BaseView(key: state.pageKey, child: child),
       routes: [
         GoRoute(
           name: NamedRoute.home.name,
@@ -59,7 +59,7 @@ final router = GoRouter(
               path: NamedRoute.activity.path,
               parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) {
-                return ActivityScreen(
+                return ActivityView(
                   id: int.parse(state.params['id'] ?? "-1"),
                 );
               },

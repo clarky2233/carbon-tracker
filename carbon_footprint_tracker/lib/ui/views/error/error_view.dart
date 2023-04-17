@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ErrorScreen extends StatelessWidget {
+class ErrorView extends StatelessWidget {
   final String msg;
 
-  const ErrorScreen({
+  const ErrorView({
     Key? key,
     required this.msg,
   }) : super(key: key);

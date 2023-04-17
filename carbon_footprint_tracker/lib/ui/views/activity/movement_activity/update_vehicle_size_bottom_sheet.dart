@@ -1,19 +1,10 @@
-import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
-import 'package:carbon_footprint_tracker/objectbox.g.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity/activity_view_controller.dart';
 import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:carbon_footprint_tracker/ui/widgets/bottom_sheet_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final updateVehicleSizeProvider =
-    StateProvider.autoDispose.family<VehicleSize?, int>((ref, id) {
-  final box = store.box<CarbonActivitySchema>();
-  final activity = box.get(id)!.toActivity() as MovementActivity;
-  return activity.vehicleSize;
-});
 
 class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
   final MovementActivity activity;
@@ -25,8 +16,10 @@ class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedItem = ref.watch(updateVehicleSizeProvider(activity.id));
-    final notifier = ref.read(updateVehicleSizeProvider(activity.id).notifier);
+    final selectedItem = ref.watch(activityViewControllerProvider(activity)
+        .select((value) => (value as MovementActivity).vehicleSize));
+    final controller =
+        ref.read(activityViewControllerProvider(activity).notifier);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.55,
@@ -49,11 +42,7 @@ class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
                   value: selectedItem == item,
                   title: Text(item.name.capitalize()),
                   onChanged: (_) {
-                    notifier.state = item;
-                    store.box<CarbonActivitySchema>().put(
-                          (activity..vehicleSize = item).toDB(),
-                          mode: PutMode.update,
-                        );
+                    controller.updateVehicleSize(item);
                   },
                 );
               },

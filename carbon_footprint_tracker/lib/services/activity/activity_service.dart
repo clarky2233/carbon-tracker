@@ -6,7 +6,14 @@ final activityServiceProvider = StateProvider<ActivityService>((ref) {
   return ActivityServiceObjectBox();
 });
 
-
 abstract class ActivityService {
   Stream<List<CarbonActivity>> getActivityHistory();
+
+  Stream<CarbonActivity?> getActivityStream(int id);
+
+  CarbonActivity? getActivity(int id);
+
+  void deleteActivity(int id);
+
+  void updateActivity(CarbonActivity activity);
 }

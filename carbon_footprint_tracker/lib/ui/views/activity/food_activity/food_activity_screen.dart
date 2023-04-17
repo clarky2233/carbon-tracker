@@ -1,10 +1,10 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
-import 'package:carbon_footprint_tracker/screens/activity/food_activity/consumption_tile.dart';
-import 'package:carbon_footprint_tracker/screens/activity/widgets/no_emissions_factor_alert.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/activity_title.dart';
 import '../widgets/delete_activity_button.dart';
+import '../widgets/no_emissions_factor_alert.dart';
+import 'consumption_tile.dart';
 
 class FoodActivityScreen extends StatelessWidget {
   final FoodActivity activity;
