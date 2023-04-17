@@ -1,15 +1,15 @@
 import 'dart:developer';
 
-import 'package:carbon_footprint_tracker/config/theme/system_theme.dart';
 import 'package:carbon_footprint_tracker/models/activity_recognition/activity_recognition.dart';
 import 'package:carbon_footprint_tracker/models/geo/geo.dart';
 import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
+import 'package:carbon_footprint_tracker/ui/theme/system_theme.dart';
+import 'package:carbon_footprint_tracker/ui/theme/theme_controller.dart';
+import 'package:carbon_footprint_tracker/ui/theme/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 import 'app.dart';
-import 'config/theme/theme_controller.dart';
-import 'config/theme/theme_service.dart';
 import 'package:provider/provider.dart';
 
 @pragma('vm:entry-point')

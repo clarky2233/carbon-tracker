@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/carbon_activity/constants/fuel_type.dart';
-import '../../../widgets/bottom_sheet_top_bar.dart';
+import '../../../ui/widgets/bottom_sheet_top_bar.dart';
 import '../transport_input_screen.dart';
 
 class FuelTypeSelection extends ConsumerWidget {

@@ -1,4 +1,4 @@
-import 'package:carbon_footprint_tracker/config/routing/named_route.dart';
+import 'package:carbon_footprint_tracker/navigation/named_route.dart';
 import 'package:carbon_footprint_tracker/models/user_info/user_info.dart';
 import 'package:carbon_footprint_tracker/models/user_info/user_info_notifier.dart';
 import 'package:carbon_footprint_tracker/screens/questionnaire/widgets/electricity_question.dart';

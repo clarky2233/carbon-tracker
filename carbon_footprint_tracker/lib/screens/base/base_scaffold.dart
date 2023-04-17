@@ -1,11 +1,11 @@
-import 'package:carbon_footprint_tracker/config/routing/named_route.dart';
-import 'package:carbon_footprint_tracker/screens/activity_history/activity_history_screen.dart';
-import 'package:carbon_footprint_tracker/screens/home/home_screen.dart';
+import 'package:carbon_footprint_tracker/navigation/named_route.dart';
+import 'package:carbon_footprint_tracker/ui/views/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../settings/settings_screen.dart';
+import '../../ui/views/activity_history/activity_history_view.dart';
+import '../../ui/views/settings/settings_view.dart';
 
 final selectedIndexProvider = StateProvider.autoDispose<int>((ref) {
   return 0;
@@ -49,9 +49,9 @@ class _BaseScaffoldState extends ConsumerState<BaseScaffold> {
   ];
 
   final List<Widget> _screens = const [
-    HomeScreen(),
-    ActivityHistoryScreen(),
-    SettingsScreen(),
+    HomeView(),
+    ActivityHistoryView(),
+    SettingsView(),
   ];
 
   @override

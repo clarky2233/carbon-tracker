@@ -5,9 +5,10 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_
 import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/screens/error/error_screen.dart';
-import 'package:carbon_footprint_tracker/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../ui/widgets/loading_screen.dart';
 
 final activityProvider =
     StreamProvider.autoDispose.family<CarbonActivity?, int>((ref, id) async* {

@@ -2,11 +2,11 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/screens/activity/movement_activity/movement_activity_screen.dart';
-import 'package:carbon_footprint_tracker/screens/activity_history/widgets/movement_activity_tile.dart';
 import 'package:carbon_footprint_tracker/utils/emission_factor.dart';
 import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:carbon_footprint_tracker/utils/serializer.dart';
 import 'package:flutter/material.dart';
+import '../../ui/views/activity_history/widgets/movement_activity_tile.dart';
 import 'constants/fuel_type.dart';
 import 'constants/vehicle_size.dart';
 

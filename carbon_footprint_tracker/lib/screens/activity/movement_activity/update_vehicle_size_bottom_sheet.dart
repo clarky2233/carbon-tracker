@@ -4,7 +4,7 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activit
 import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/utils/extensions.dart';
-import 'package:carbon_footprint_tracker/widgets/bottom_sheet_top_bar.dart';
+import 'package:carbon_footprint_tracker/ui/widgets/bottom_sheet_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
