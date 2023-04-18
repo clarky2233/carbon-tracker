@@ -16,4 +16,6 @@ abstract class ActivityService {
   void deleteActivity(int id);
 
   void updateActivity(CarbonActivity activity);
+
+  void saveActivity(CarbonActivity activity);
 }

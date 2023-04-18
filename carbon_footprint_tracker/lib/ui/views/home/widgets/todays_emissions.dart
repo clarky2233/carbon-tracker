@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../home_view_controller.dart';
+import '../controllers/home_view_todays_emissions.dart';
 
 class TodaysEmissions extends ConsumerWidget {
   const TodaysEmissions({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:carbon_footprint_tracker/ui/views/settings/settings_view_controller.dart';
+import 'package:carbon_footprint_tracker/ui/views/settings/controllers/settings_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +9,7 @@ class ThemeToggleTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    final controller = ref.watch(settingsViewControllerProvider);
+    final controller = ref.watch(settingsViewProvider.notifier);
 
     return ListTile(
       leading: Icon(

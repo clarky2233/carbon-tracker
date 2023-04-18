@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../activity_history/activity_history_view.dart';
 import '../settings/settings_view.dart';
-import 'base_view_controller.dart';
+import 'controllers/base_view_index.dart';
 
 class BaseView extends ConsumerStatefulWidget {
   final Widget child;

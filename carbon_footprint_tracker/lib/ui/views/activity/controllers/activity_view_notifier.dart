@@ -10,15 +10,14 @@ import '../../../../models/carbon_activity/constants/vehicle_size.dart';
 import '../../../../services/activity/activity_service.dart';
 
 class ActivityViewNotifier
-    extends FamilyNotifier<CarbonActivity, CarbonActivity> {
+    extends AutoDisposeFamilyNotifier<CarbonActivity, CarbonActivity> {
   late ActivityService activityService;
 
-  ActivityViewNotifier() {
-    activityService = ref.watch(activityServiceProvider);
-  }
+  ActivityViewNotifier();
 
   @override
   CarbonActivity build(CarbonActivity arg) {
+    activityService = ref.watch(activityServiceProvider);
     return arg;
   }
 
@@ -63,5 +62,6 @@ class ActivityViewNotifier
   }
 }
 
-final activityViewProvider = NotifierProvider.family<ActivityViewNotifier,
-    CarbonActivity, CarbonActivity>(ActivityViewNotifier.new);
+final activityViewProvider = NotifierProvider.family
+    .autoDispose<ActivityViewNotifier, CarbonActivity, CarbonActivity>(
+        ActivityViewNotifier.new);

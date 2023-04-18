@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/ui/views/activity_history/activity_history_view_controller.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity_history/controllers/activity_history_view_stream.dart';
 import 'package:carbon_footprint_tracker/ui/views/activity_history/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

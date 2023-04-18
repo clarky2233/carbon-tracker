@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_footprint_tracker/navigation/named_route.dart';
-import 'package:carbon_footprint_tracker/screens/food_input/food_input_screen.dart';
+import 'package:carbon_footprint_tracker/ui/views/food_input/food_input_view.dart';
 import 'package:carbon_footprint_tracker/screens/questionnaire/questionnaire_screen.dart';
 import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +95,7 @@ final router = GoRouter(
       name: NamedRoute.foodInput.name,
       path: NamedRoute.foodInput.path,
       builder: (context, state) {
-        return const FoodInputScreen();
+        return const FoodInputView();
       },
     ),
     GoRoute(

@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
-import '../../theme/theme_controller.dart';
-import '../../theme/theme_data.dart';
+import '../../../theme/theme_controller.dart';
+import '../../../theme/theme_data.dart';
 
-final settingsViewControllerProvider =
-    StateProvider<SettingsViewController>((ref) {
-  return SettingsViewController();
-});
+class SettingsViewNotifier extends Notifier<void> {
+  @override
+  void build() {}
 
-class SettingsViewController {
   Future<void> updateThemeMode(BuildContext context, bool value) async {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final themeProvider = ThemeProvider.of(context);
@@ -27,3 +25,5 @@ class SettingsViewController {
         .updateThemeMode(value ? ThemeMode.dark : ThemeMode.light);
   }
 }
+
+final settingsViewProvider = NotifierProvider(SettingsViewNotifier.new);

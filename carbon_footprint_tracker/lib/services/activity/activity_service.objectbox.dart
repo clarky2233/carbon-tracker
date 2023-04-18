@@ -57,4 +57,10 @@ class ActivityServiceObjectBox implements ActivityService {
           mode: PutMode.update,
         );
   }
+
+  @override
+  void saveActivity(CarbonActivity activity) {
+    final box = store.box<CarbonActivitySchema>();
+    box.put(activity.toDB());
+  }
 }
