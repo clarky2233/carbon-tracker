@@ -33,12 +33,16 @@ class ActivityServiceObjectBox implements ActivityService {
 
   @override
   void deleteActivity(int id) {
+    if (id <= 0) return;
+
     final activityBox = store.box<CarbonActivitySchema>();
     activityBox.remove(id);
   }
 
   @override
   CarbonActivity? getActivity(int id) {
+    if (id <= 0) return null;
+
     final box = store.box<CarbonActivitySchema>();
     final activity = box.get(id)?.toActivity();
     return activity;
@@ -46,6 +50,8 @@ class ActivityServiceObjectBox implements ActivityService {
 
   @override
   void updateActivity(CarbonActivity activity) {
+    if (activity.id <= 0) return;
+
     store.box<CarbonActivitySchema>().put(
           activity.toDB(),
           mode: PutMode.update,

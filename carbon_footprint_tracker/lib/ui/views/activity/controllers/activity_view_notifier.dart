@@ -9,29 +9,18 @@ import '../../../../models/carbon_activity/constants/food_consumption.dart';
 import '../../../../models/carbon_activity/constants/vehicle_size.dart';
 import '../../../../services/activity/activity_service.dart';
 
-final activityProvider =
-    StreamProvider.autoDispose.family<CarbonActivity?, int>((ref, id) async* {
-  final activityService = ref.watch(activityServiceProvider);
-  yield* activityService.getActivityStream(id);
-});
+class ActivityViewNotifier
+    extends FamilyNotifier<CarbonActivity, CarbonActivity> {
+  late ActivityService activityService;
 
-final activityViewProvider = StateNotifierProvider.family<
-    ActivityViewNotifier, CarbonActivity, CarbonActivity>((ref, initial) {
-  final activityService = ref.watch(activityServiceProvider);
-  return ActivityViewNotifier(
-    initial: initial,
-    activityService: activityService,
-  );
-});
+  ActivityViewNotifier() {
+    activityService = ref.watch(activityServiceProvider);
+  }
 
-class ActivityViewNotifier extends StateNotifier<CarbonActivity> {
-  final CarbonActivity initial;
-  final ActivityService activityService;
-
-  ActivityViewNotifier({
-    required this.initial,
-    required this.activityService,
-  }) : super(initial);
+  @override
+  CarbonActivity build(CarbonActivity arg) {
+    return arg;
+  }
 
   void deleteActivity() {
     activityService.deleteActivity(state.id);
@@ -73,3 +62,6 @@ class ActivityViewNotifier extends StateNotifier<CarbonActivity> {
     activityService.updateActivity(state);
   }
 }
+
+final activityViewProvider = NotifierProvider.family<ActivityViewNotifier,
+    CarbonActivity, CarbonActivity>(ActivityViewNotifier.new);
