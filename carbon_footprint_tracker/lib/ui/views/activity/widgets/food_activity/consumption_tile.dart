@@ -1,14 +1,12 @@
-import 'package:carbon_footprint_tracker/ui/views/activity/movement_activity/update_transport_mode_bottom_sheet.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
+import 'package:carbon_footprint_tracker/ui/views/activity/widgets/food_activity/update_consumption_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../models/carbon_activity/movement_activity.dart';
+class ConsumptionTile extends ConsumerWidget {
+  final FoodActivity activity;
 
-class TransportModeTile extends ConsumerWidget {
-  final MovementActivity activity;
-
-  const TransportModeTile({
+  const ConsumptionTile({
     Key? key,
     required this.activity,
   }) : super(key: key);
@@ -16,9 +14,9 @@ class TransportModeTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: const Icon(Icons.commute_outlined),
-      title: Text(activity.transportMode.name.capitalize()),
-      subtitle: const Text("Transport Mode"),
+      leading: Icon(activity.foodConsumption.icon),
+      title: Text(activity.foodConsumption.text),
+      subtitle: Text(activity.foodConsumption.description),
       trailing: IgnorePointer(
         child: IconButton(
           icon: const Icon(Icons.edit_outlined),
@@ -30,7 +28,7 @@ class TransportModeTile extends ConsumerWidget {
           context: context,
           isScrollControlled: true,
           builder: (context) {
-            return UpdateTransportModeBottomSheet(activity: activity);
+            return UpdateConsumptionBottomSheet(activity: activity);
           },
         );
       },

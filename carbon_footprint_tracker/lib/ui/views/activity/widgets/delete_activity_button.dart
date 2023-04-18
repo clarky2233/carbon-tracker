@@ -1,8 +1,9 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
-import 'package:carbon_footprint_tracker/ui/views/activity/activity_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../controllers/activity_view_notifier.dart';
 
 class DeleteActivityButton extends ConsumerWidget {
   final CarbonActivity activity;
@@ -15,7 +16,7 @@ class DeleteActivityButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller =
-        ref.watch(activityViewControllerProvider(activity).notifier);
+        ref.watch(activityViewProvider(activity).notifier);
 
     return IconButton(
       onPressed: () async {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/loading_screen.dart';
 import '../error/error_view.dart';
-import 'activity_view_controller.dart';
+import 'controllers/activity_view_notifier.dart';
 
 class ActivityView extends ConsumerWidget {
   final int id;

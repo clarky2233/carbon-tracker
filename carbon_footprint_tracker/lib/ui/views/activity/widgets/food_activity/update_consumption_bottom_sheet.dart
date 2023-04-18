@@ -1,25 +1,26 @@
-import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
-import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
-import 'package:carbon_footprint_tracker/ui/views/activity/activity_view_controller.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/food_consumption.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
 import 'package:carbon_footprint_tracker/ui/widgets/bottom_sheet_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
-  final MovementActivity activity;
+import '../../controllers/activity_view_notifier.dart';
 
-  const UpdateVehicleSizeBottomSheet({
+
+class UpdateConsumptionBottomSheet extends ConsumerWidget {
+  final FoodActivity activity;
+
+  const UpdateConsumptionBottomSheet({
     Key? key,
     required this.activity,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedItem = ref.watch(activityViewControllerProvider(activity)
-        .select((value) => (value as MovementActivity).vehicleSize));
+    final selectedItem = ref.watch(activityViewProvider(activity)
+        .select((value) => (value as FoodActivity).foodConsumption));
     final controller =
-        ref.read(activityViewControllerProvider(activity).notifier);
+        ref.read(activityViewProvider(activity).notifier);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.55,
@@ -28,21 +29,21 @@ class UpdateVehicleSizeBottomSheet extends ConsumerWidget {
         children: [
           const BottomSheetTopBar(),
           Text(
-            "Update Vehicle Size",
+            "Update Food Consumption",
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const Divider(height: 32),
           Expanded(
             child: ListView.builder(
-              itemCount: VehicleSize.options.length,
+              itemCount: FoodConsumption.values.length,
               itemBuilder: (context, i) {
-                final item = VehicleSize.options[i];
+                final item = FoodConsumption.values[i];
 
                 return CheckboxListTile(
                   value: selectedItem == item,
-                  title: Text(item.name.capitalize()),
+                  title: Text(item.text),
                   onChanged: (_) {
-                    controller.updateVehicleSize(item);
+                    controller.updateFoodConsumption(item);
                   },
                 );
               },

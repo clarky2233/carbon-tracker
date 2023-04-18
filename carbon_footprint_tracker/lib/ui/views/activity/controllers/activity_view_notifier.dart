@@ -4,10 +4,10 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.da
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/carbon_activity/carbon_activity.dart';
-import '../../../models/carbon_activity/constants/food_consumption.dart';
-import '../../../models/carbon_activity/constants/vehicle_size.dart';
-import '../../../services/activity/activity_service.dart';
+import '../../../../models/carbon_activity/carbon_activity.dart';
+import '../../../../models/carbon_activity/constants/food_consumption.dart';
+import '../../../../models/carbon_activity/constants/vehicle_size.dart';
+import '../../../../services/activity/activity_service.dart';
 
 final activityProvider =
     StreamProvider.autoDispose.family<CarbonActivity?, int>((ref, id) async* {
@@ -15,20 +15,20 @@ final activityProvider =
   yield* activityService.getActivityStream(id);
 });
 
-final activityViewControllerProvider = StateNotifierProvider.family<
-    ActivityViewController, CarbonActivity, CarbonActivity>((ref, initial) {
+final activityViewProvider = StateNotifierProvider.family<
+    ActivityViewNotifier, CarbonActivity, CarbonActivity>((ref, initial) {
   final activityService = ref.watch(activityServiceProvider);
-  return ActivityViewController(
+  return ActivityViewNotifier(
     initial: initial,
     activityService: activityService,
   );
 });
 
-class ActivityViewController extends StateNotifier<CarbonActivity> {
+class ActivityViewNotifier extends StateNotifier<CarbonActivity> {
   final CarbonActivity initial;
   final ActivityService activityService;
 
-  ActivityViewController({
+  ActivityViewNotifier({
     required this.initial,
     required this.activityService,
   }) : super(initial);

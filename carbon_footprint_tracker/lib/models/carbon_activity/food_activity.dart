@@ -4,7 +4,7 @@ import 'package:carbon_footprint_tracker/utils/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 
-import '../../ui/views/activity/food_activity/food_activity_screen.dart';
+import '../../ui/views/activity/widgets/food_activity/food_activity_view.dart';
 import '../../ui/views/activity_history/widgets/food_activity_tile.dart';
 import '../../utils/emission_factor.dart';
 import 'constants/food_consumption.dart';
@@ -47,7 +47,7 @@ class FoodActivity implements CarbonActivity {
 
   @override
   Widget buildScreen() {
-    return FoodActivityScreen(activity: this);
+    return FoodActivityView(activity: this);
   }
 
   @override
