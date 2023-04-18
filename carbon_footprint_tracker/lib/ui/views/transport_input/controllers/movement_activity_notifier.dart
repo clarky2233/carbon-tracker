@@ -1,39 +1,43 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
+import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'constants/fuel_type.dart';
-import 'constants/transport_mode.dart';
-import 'constants/vehicle_size.dart';
+import '../../../../models/carbon_activity/constants/fuel_type.dart';
+import '../../../../models/carbon_activity/constants/transport_mode.dart';
+import '../../../../models/carbon_activity/constants/vehicle_size.dart';
 
-class MovementActivityNotifier extends StateNotifier<MovementActivity> {
-  MovementActivityNotifier()
-      : super(
-          MovementActivity(
-            startedAt: DateTime.now().startOfHour,
-            endedAt:
-                DateTime.now().startOfHour.add(const Duration(minutes: 30)),
-            distance: 0,
-            startLat: 0,
-            startLong: 0,
-            endLat: 0,
-            endLong: 0,
-            startStreet: null,
-            startAdministrativeArea: null,
-            startCountry: null,
-            startPostcode: null,
-            startSubLocality: null,
-            endStreet: null,
-            endAdministrativeArea: null,
-            endCountry: null,
-            endPostcode: null,
-            endSubLocality: null,
-            vehicleSize: VehicleSize.medium,
-            fuelType: FuelType.petroleum,
-            transportMode: TransportMode.car,
-          ),
-        );
+class MovementActivityNotifier extends AutoDisposeNotifier<MovementActivity> {
+  late ActivityService activityService;
+
+  @override
+  MovementActivity build() {
+    activityService = ref.watch(activityServiceProvider);
+
+    return MovementActivity(
+      startedAt: DateTime.now().startOfHour,
+      endedAt: DateTime.now().startOfHour.add(const Duration(minutes: 30)),
+      distance: 0,
+      startLat: 0,
+      startLong: 0,
+      endLat: 0,
+      endLong: 0,
+      startStreet: null,
+      startAdministrativeArea: null,
+      startCountry: null,
+      startPostcode: null,
+      startSubLocality: null,
+      endStreet: null,
+      endAdministrativeArea: null,
+      endCountry: null,
+      endPostcode: null,
+      endSubLocality: null,
+      vehicleSize: VehicleSize.medium,
+      fuelType: FuelType.petroleum,
+      transportMode: TransportMode.car,
+    );
+  }
 
   void setTransportMode(TransportMode mode) {
     state = state.copyWith(
@@ -97,4 +101,13 @@ class MovementActivityNotifier extends StateNotifier<MovementActivity> {
   void setFuelType(FuelType fuelType) {
     state = state.copyWith(fuelType: fuelType);
   }
+
+  void saveActivity() {
+    state.estimateDistance();
+    activityService.saveActivity(state);
+  }
 }
+
+final newTripProvider =
+    NotifierProvider.autoDispose<MovementActivityNotifier, MovementActivity>(
+        MovementActivityNotifier.new);

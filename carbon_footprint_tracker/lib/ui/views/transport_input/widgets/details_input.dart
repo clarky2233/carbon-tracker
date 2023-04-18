@@ -1,10 +1,11 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
-import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
-import 'package:carbon_footprint_tracker/screens/transport_input/widgets/fuel_type_details.dart';
-import 'package:carbon_footprint_tracker/screens/transport_input/widgets/vehicle_size_details.dart';
+import 'package:carbon_footprint_tracker/ui/views/transport_input/widgets/fuel_type_details.dart';
+import 'package:carbon_footprint_tracker/ui/views/transport_input/widgets/vehicle_size_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../controllers/movement_activity_notifier.dart';
 
 class DetailsInput extends ConsumerWidget {
   const DetailsInput({

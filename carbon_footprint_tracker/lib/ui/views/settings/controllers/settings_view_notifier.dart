@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../theme/theme_controller.dart';
 import '../../../theme/theme_data.dart';
 
-class SettingsViewNotifier extends Notifier<void> {
+class SettingsViewNotifier extends AutoDisposeNotifier<void> {
   @override
   void build() {}
 
@@ -26,4 +26,5 @@ class SettingsViewNotifier extends Notifier<void> {
   }
 }
 
-final settingsViewProvider = NotifierProvider(SettingsViewNotifier.new);
+final settingsViewProvider =
+    NotifierProvider.autoDispose(SettingsViewNotifier.new);

@@ -2,7 +2,7 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_t
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../transport_input_screen.dart';
+import '../controllers/movement_activity_notifier.dart';
 import 'fuel_type_selection.dart';
 
 class FuelTypeDetails extends ConsumerWidget {

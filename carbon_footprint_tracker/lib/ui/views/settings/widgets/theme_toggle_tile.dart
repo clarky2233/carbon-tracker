@@ -1,4 +1,4 @@
-import 'package:carbon_footprint_tracker/ui/views/settings/controllers/settings_view_controller.dart';
+import 'package:carbon_footprint_tracker/ui/views/settings/controllers/settings_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

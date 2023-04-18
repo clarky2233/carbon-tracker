@@ -29,5 +29,5 @@ class FoodInputViewNotifier extends AutoDisposeNotifier<FoodConsumption?> {
 }
 
 final foodInputViewProvider =
-    AutoDisposeNotifierProvider<FoodInputViewNotifier, FoodConsumption?>(
+    NotifierProvider.autoDispose<FoodInputViewNotifier, FoodConsumption?>(
         FoodInputViewNotifier.new);

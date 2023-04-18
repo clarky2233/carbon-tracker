@@ -1,10 +1,10 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
-import 'package:carbon_footprint_tracker/screens/transport_input/transport_input_screen.dart';
 import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../ui/widgets/bottom_sheet_top_bar.dart';
+import '../../../widgets/bottom_sheet_top_bar.dart';
+import '../controllers/movement_activity_notifier.dart';
 
 class VehicleSizeSelection extends ConsumerWidget {
   const VehicleSizeSelection({
