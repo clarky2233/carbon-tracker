@@ -1,19 +1,18 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/models/user_info/user_info.dart';
-import 'package:carbon_footprint_tracker/objectbox.g.dart';
+import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../carbon_activity/constants/food_consumption.dart';
-import '../carbon_activity/constants/fuel_type.dart';
+import '../../../../models/carbon_activity/constants/food_consumption.dart';
+import '../../../../models/carbon_activity/constants/fuel_type.dart';
 
 class UserInfoNotifier extends Notifier<UserInfo> {
-  final box = store.box<UserInfo>();
+  late QuestionnaireService questionnaireService;
 
   @override
   UserInfo build() {
-    final userInfoList = box.getAll();
-    return userInfoList.isEmpty ? UserInfo() : userInfoList.first;
+    questionnaireService = ref.watch(questionnaireServiceProvider);
+    return questionnaireService.getAnswers();
   }
 
   void setTransportMode(TransportMode transportMode) {
@@ -41,6 +40,9 @@ class UserInfoNotifier extends Notifier<UserInfo> {
   }
 
   void save() {
-    box.put(state, mode: state.id == 0 ? PutMode.insert : PutMode.update);
+    questionnaireService.saveAnswers(state);
   }
 }
+
+final userInfoProvider =
+    NotifierProvider<UserInfoNotifier, UserInfo>(UserInfoNotifier.new);

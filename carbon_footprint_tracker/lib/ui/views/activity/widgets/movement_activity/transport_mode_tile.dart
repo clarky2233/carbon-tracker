@@ -1,5 +1,5 @@
+import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
 import 'package:carbon_footprint_tracker/ui/views/activity/widgets/movement_activity/update_transport_mode_bottom_sheet.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

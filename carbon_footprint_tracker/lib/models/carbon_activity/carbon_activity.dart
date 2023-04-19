@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/serializer.dart';
+import 'serializer.dart';
 import 'carbon_activity_schema.dart';
 
 abstract class CarbonActivity {

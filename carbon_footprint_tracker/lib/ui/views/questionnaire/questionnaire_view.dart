@@ -1,21 +1,18 @@
 import 'package:carbon_footprint_tracker/navigation/named_route.dart';
-import 'package:carbon_footprint_tracker/models/user_info/user_info.dart';
-import 'package:carbon_footprint_tracker/models/user_info/user_info_notifier.dart';
-import 'package:carbon_footprint_tracker/screens/questionnaire/widgets/electricity_question.dart';
-import 'package:carbon_footprint_tracker/screens/questionnaire/widgets/food_consumption_question.dart';
-import 'package:carbon_footprint_tracker/screens/questionnaire/widgets/fuel_type_question.dart';
-import 'package:carbon_footprint_tracker/screens/questionnaire/widgets/transport_mode_question.dart';
+import 'package:carbon_footprint_tracker/ui/views/questionnaire/controllers/user_info_notifier.dart';
+import 'package:carbon_footprint_tracker/ui/views/questionnaire/widgets/electricity_question.dart';
+import 'package:carbon_footprint_tracker/ui/views/questionnaire/widgets/food_consumption_question.dart';
+import 'package:carbon_footprint_tracker/ui/views/questionnaire/widgets/fuel_type_question.dart';
+import 'package:carbon_footprint_tracker/ui/views/questionnaire/widgets/transport_mode_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-final userInfoProvider = NotifierProvider<UserInfoNotifier, UserInfo>(() {
-  return UserInfoNotifier();
-});
 
-class QuestionnaireScreen extends ConsumerWidget {
-  const QuestionnaireScreen({Key? key}) : super(key: key);
+
+class QuestionnaireView extends ConsumerWidget {
+  const QuestionnaireView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

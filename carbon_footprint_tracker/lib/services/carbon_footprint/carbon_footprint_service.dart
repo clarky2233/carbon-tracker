@@ -2,8 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'carbon_footprint_service.objectbox.dart';
 
-final carbonFootprintServiceProvider =
-    StateProvider<CarbonFootprintService>((ref) {
+final carbonFootprintServiceProvider = Provider<CarbonFootprintService>((ref) {
   return CarbonFootprintServiceObjectBox();
 });
 

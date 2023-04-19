@@ -1,6 +1,7 @@
-import 'package:carbon_footprint_tracker/screens/questionnaire/questionnaire_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../controllers/user_info_notifier.dart';
 
 class ElectricityQuestion extends ConsumerWidget {
   const ElectricityQuestion({Key? key}) : super(key: key);

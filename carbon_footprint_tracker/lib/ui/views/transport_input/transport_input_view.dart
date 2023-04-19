@@ -5,8 +5,8 @@ import 'package:carbon_footprint_tracker/ui/views/transport_input/widgets/transp
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransportInputScreen extends ConsumerWidget {
-  const TransportInputScreen({Key? key}) : super(key: key);
+class TransportInputView extends ConsumerWidget {
+  const TransportInputView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

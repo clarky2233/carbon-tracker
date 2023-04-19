@@ -1,6 +1,6 @@
+import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
 import 'package:carbon_footprint_tracker/navigation/named_route.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';

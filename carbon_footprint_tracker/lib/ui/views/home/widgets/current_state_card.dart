@@ -1,4 +1,4 @@
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
+import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

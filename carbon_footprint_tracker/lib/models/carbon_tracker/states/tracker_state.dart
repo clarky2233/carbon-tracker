@@ -1,10 +1,10 @@
+import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/cycling_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/vehicle_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/flying_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/idle_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../carbon_activity/constants/transport_mode.dart';

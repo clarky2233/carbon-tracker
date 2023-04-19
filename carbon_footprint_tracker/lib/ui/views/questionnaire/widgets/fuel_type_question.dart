@@ -1,7 +1,8 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
-import 'package:carbon_footprint_tracker/screens/questionnaire/questionnaire_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../controllers/user_info_notifier.dart';
 
 class FuelTypeQuestion extends ConsumerWidget {
   const FuelTypeQuestion({Key? key}) : super(key: key);
