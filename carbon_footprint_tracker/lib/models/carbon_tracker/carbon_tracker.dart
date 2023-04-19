@@ -9,6 +9,8 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/tracker_st
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/objectbox.g.dart';
+import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
+import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:statemachine/statemachine.dart';
@@ -20,8 +22,11 @@ class CarbonTracker {
   Stream<TrackerEvent> eventStream;
   Store store;
   List<TrackerState> states;
-  late Box<CarbonActivitySchema> activityBox;
-  late Box<EventLog> eventBox;
+  ActivityService activityService;
+  LoggingService loggingService;
+
+  // late Box<CarbonActivitySchema> activityBox;
+  // late Box<EventLog> eventBox;
 
   static const List<TrackerState> _defaultStates = [
     IdleState(),
@@ -38,10 +43,12 @@ class CarbonTracker {
     required this.context,
     required this.eventStream,
     required this.store,
+    required this.loggingService,
+    required this.activityService,
     this.states = _defaultStates,
   }) {
-    activityBox = store.box<CarbonActivitySchema>();
-    eventBox = store.box<EventLog>();
+    // activityBox = store.box<CarbonActivitySchema>();
+    // eventBox = store.box<EventLog>();
 
     // Initialize states in state machine
     for (TrackerState state in states) {
@@ -98,7 +105,10 @@ class CarbonTracker {
   }
 
   void _logEvent(TrackerEvent event) {
-    eventBox.put(EventLog(event: event.name, dateTime: DateTime.now()));
+    loggingService.logEvent(EventLog(
+      event: event.name,
+      dateTime: DateTime.now(),
+    ));
   }
 
   Future<void> createActivity(TrackerState state) async {
@@ -141,22 +151,14 @@ class CarbonTracker {
     if (_combineActivity(activity)) return;
 
     // Save activity to database
-    activityBox.put(activity);
+    activityService.saveActivity(activity.toActivity());
+    // activityBox.put(activity);
   }
 
   bool _combineActivity(CarbonActivitySchema activity) {
-    final query = activityBox
-        .query(CarbonActivitySchema_.type.equals(MovementActivity.type))
-        .order(CarbonActivitySchema_.endedAt, flags: Order.descending)
-        .build()
-      ..limit = 1;
+    CarbonActivitySchema? lastActivity = activityService.getLatestActivity();
 
-    List<CarbonActivitySchema> lastActivityList = query.find();
-
-    // No last activity
-    if (lastActivityList.isEmpty) return false;
-
-    CarbonActivitySchema lastActivity = lastActivityList.last;
+    if (lastActivity == null) return false;
 
     // Last activity is a different type
     if (activity.type != lastActivity.type) return false;
@@ -192,7 +194,8 @@ class CarbonTracker {
       ..endPostcode = activity.endPostcode
       ..endSubLocality = activity.endSubLocality;
 
-    activityBox.put(lastActivity, mode: PutMode.update);
+    // activityBox.put(lastActivity, mode: PutMode.update);
+    activityService.updateActivity(lastActivity.toActivity());
 
     return true;
   }

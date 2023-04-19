@@ -67,6 +67,7 @@ class TrackerContext {
 
     if (newDistance < distanceThreshold) return;
 
+    latestPosition = event.position;
     distance += newDistance;
   }
 

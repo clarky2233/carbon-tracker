@@ -1,4 +1,5 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.objectbox.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,4 +19,6 @@ abstract class ActivityService {
   void updateActivity(CarbonActivity activity);
 
   void saveActivity(CarbonActivity activity);
+
+  CarbonActivitySchema? getLatestActivity();
 }
