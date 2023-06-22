@@ -98,12 +98,15 @@ def knn(train_features, test_features, train_labels, test_labels):
 
 def main():
     sensors = ['android.sensor.accelerometer', 'android.sensor.gyroscope', 'android.sensor.magnetic_field']
+    sensors = ['android.sensor.accelerometer', 'android.sensor.magnetic_field']
     dataset = load_dataset('datasets/dataset_5SecondWindow.csv', sensors=sensors)
     train_features, test_features, train_labels, test_labels = preprocessing(dataset)
     clf = rf_std(train_features, test_features, train_labels, test_labels)
 
     lazy = LazyExport(clf)
-    lazy.save('checkpoints/tmd_rf.json', force_override=True)
+    lazy.save('checkpoints/tmd_rf_acc_mag.json', force_override=True)
+
+
 
     # dataset = SensorDataset(filename='datasets/dataset_5secondWindow.csv', sensors=sensors)
     #
