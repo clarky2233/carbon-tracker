@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:carbon_footprint_tracker/extensions/stream_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/sensors/tmd_features.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:stream_transform/stream_transform.dart';
 import '../carbon_tracker/events/tracker_event.dart';

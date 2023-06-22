@@ -1,6 +1,6 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
-import 'package:carbon_footprint_tracker/utils/serializer.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/serializer.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'constants/food_consumption.dart';

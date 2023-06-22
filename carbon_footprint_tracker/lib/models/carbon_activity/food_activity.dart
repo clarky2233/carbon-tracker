@@ -1,12 +1,12 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/screens/activity/food_activity/food_activity_screen.dart';
-import 'package:carbon_footprint_tracker/screens/activity_history/widgets/food_activity_tile.dart';
-import 'package:carbon_footprint_tracker/utils/serializer.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 
-import '../../utils/emission_factor.dart';
+import '../../ui/views/activity/widgets/food_activity/food_activity_view.dart';
+import '../../ui/views/activity_history/widgets/food_activity_tile.dart';
+import '../emission_factor/emission_factor.dart';
 import 'constants/food_consumption.dart';
 
 class FoodActivity implements CarbonActivity {
@@ -47,7 +47,7 @@ class FoodActivity implements CarbonActivity {
 
   @override
   Widget buildScreen() {
-    return FoodActivityScreen(activity: this);
+    return FoodActivityView(activity: this);
   }
 
   @override
@@ -56,6 +56,20 @@ class FoodActivity implements CarbonActivity {
   @override
   CarbonActivitySchema toDB() {
     return serializer.toDB(this);
+  }
+
+  FoodActivity copyWith({
+    int? id,
+    Serializer? serializer,
+    DateTime? date,
+    FoodConsumption? foodConsumption,
+  }) {
+    return FoodActivity(
+      id: id ?? this.id,
+      serializer: serializer ?? this.serializer,
+      date: date ?? this.date,
+      foodConsumption: foodConsumption ?? this.foodConsumption,
+    );
   }
 }
 

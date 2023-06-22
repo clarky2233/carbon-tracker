@@ -1,8 +1,9 @@
 import 'package:async/async.dart';
 import 'package:carbon_footprint_tracker/models/geo/geo.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/models/sensors/sensors.dart';
+import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
+import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:statemachine/statemachine.dart';
 import '../../activity_recognition/activity_recognition.dart';
@@ -22,11 +23,15 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
   // ignore: deprecated_member_use
   final eventStream = ref.watch(eventsProvider.stream);
 
+  final activityService = ref.watch(activityServiceProvider);
+  final loggingService = ref.watch(loggingServiceProvider);
+
   final tracker = CarbonTracker(
     machine: Machine<TrackerState>(),
     context: TrackerContext(tmdModelPath: 'assets/models/tmd_rf.json'),
     eventStream: eventStream,
-    store: store,
+    activityService: activityService,
+    loggingService: loggingService,
   );
 
   // tracker.logFood();

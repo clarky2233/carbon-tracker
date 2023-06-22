@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:carbon_footprint_tracker/extensions/map_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sklite/ensemble/forest.dart';
@@ -67,6 +67,7 @@ class TrackerContext {
 
     if (newDistance < distanceThreshold) return;
 
+    latestPosition = event.position;
     distance += newDistance;
   }
 

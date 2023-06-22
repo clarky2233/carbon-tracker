@@ -1,12 +1,12 @@
+import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/screens/activity/movement_activity/movement_activity_screen.dart';
-import 'package:carbon_footprint_tracker/screens/activity_history/widgets/movement_activity_tile.dart';
-import 'package:carbon_footprint_tracker/utils/emission_factor.dart';
-import 'package:carbon_footprint_tracker/utils/extensions.dart';
-import 'package:carbon_footprint_tracker/utils/serializer.dart';
+import 'package:carbon_footprint_tracker/models/emission_factor/emission_factor.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/serializer.dart';
 import 'package:flutter/material.dart';
+import '../../ui/views/activity/widgets/movement_activity/movement_activity_view.dart';
+import '../../ui/views/activity_history/widgets/movement_activity_tile.dart';
 import 'constants/fuel_type.dart';
 import 'constants/vehicle_size.dart';
 
@@ -205,7 +205,7 @@ class MovementActivity implements CarbonActivity {
 
   @override
   Widget buildScreen() {
-    return MovementActivityScreen(activity: this);
+    return MovementActivityView(activity: this);
   }
 
   @override

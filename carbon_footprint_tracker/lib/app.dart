@@ -1,9 +1,9 @@
 import 'package:carbon_footprint_tracker/models/food_prediction/food_prediction.dart';
 import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
+import 'package:carbon_footprint_tracker/ui/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'config/routing/router.dart';
-import 'config/theme/theme_data.dart';
+import 'navigation/router.dart';
 import 'models/carbon_tracker/providers/state_machine_providers.dart';
 
 class MyApp extends ConsumerStatefulWidget {
