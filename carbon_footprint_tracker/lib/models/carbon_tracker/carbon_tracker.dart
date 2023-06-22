@@ -8,7 +8,6 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/idle_state
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/tracker_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
-import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,7 +19,8 @@ class CarbonTracker {
   Machine<TrackerState> machine;
   TrackerContext context;
   Stream<TrackerEvent> eventStream;
-  Store store;
+
+  // Store store;
   List<TrackerState> states;
   ActivityService activityService;
   LoggingService loggingService;
@@ -42,7 +42,6 @@ class CarbonTracker {
     required this.machine,
     required this.context,
     required this.eventStream,
-    required this.store,
     required this.loggingService,
     required this.activityService,
     this.states = _defaultStates,

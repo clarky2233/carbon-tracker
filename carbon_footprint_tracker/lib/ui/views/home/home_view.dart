@@ -1,7 +1,6 @@
 import 'package:carbon_footprint_tracker/ui/views/home/widgets/create_activity_bottom_sheet.dart';
 
 import 'package:carbon_footprint_tracker/ui/views/home/widgets/current_state_card.dart';
-import 'package:carbon_footprint_tracker/ui/views/home/widgets/latest_event_tile.dart';
 import 'package:carbon_footprint_tracker/ui/views/home/widgets/todays_emissions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,13 +15,13 @@ class HomeView extends ConsumerWidget {
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             TodaysEmissions(),
-            SizedBox(height: 10),
-            LatestEventTile(),
+            // SizedBox(height: 10),
+            // LatestEventTile(),
             SizedBox(height: 10),
             CurrentStateCard(),
           ],

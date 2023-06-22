@@ -3,10 +3,15 @@ import 'package:carbon_footprint_tracker/services/activity/activity_service.dart
 
 import '../../models/carbon_activity/carbon_activity_schema.dart';
 import '../../models/carbon_activity/movement_activity.dart';
-import '../../models/object_box/object_box.dart';
 import '../../objectbox.g.dart';
 
 class ActivityServiceObjectBox implements ActivityService {
+  final Store store;
+
+  ActivityServiceObjectBox({
+    required this.store,
+  });
+
   @override
   Stream<List<CarbonActivity>> getActivityHistory() async* {
     final box = store.box<CarbonActivitySchema>();

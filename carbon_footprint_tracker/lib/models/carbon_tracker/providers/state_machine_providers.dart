@@ -1,6 +1,5 @@
 import 'package:async/async.dart';
 import 'package:carbon_footprint_tracker/models/geo/geo.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/models/sensors/sensors.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
@@ -31,7 +30,6 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
     machine: Machine<TrackerState>(),
     context: TrackerContext(tmdModelPath: 'assets/models/tmd_rf.json'),
     eventStream: eventStream,
-    store: store,
     activityService: activityService,
     loggingService: loggingService,
   );

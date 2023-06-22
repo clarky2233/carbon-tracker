@@ -1,9 +1,14 @@
 import 'package:carbon_footprint_tracker/models/event_log/event_log.dart';
+import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 
-import '../../models/object_box/object_box.dart';
-
 class LoggingServiceObjectBox implements LoggingService {
+  final Store store;
+
+  const LoggingServiceObjectBox({
+    required this.store,
+  });
+
   @override
   List<EventLog> getLogs() {
     // TODO: implement getLogs
@@ -15,5 +20,4 @@ class LoggingServiceObjectBox implements LoggingService {
     final box = store.box<EventLog>();
     box.put(eventLog);
   }
-
 }

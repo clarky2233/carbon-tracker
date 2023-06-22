@@ -2,10 +2,15 @@ import 'package:carbon_footprint_tracker/services/carbon_footprint/carbon_footpr
 import 'package:dart_date/dart_date.dart';
 import '../../models/carbon_activity/carbon_activity.dart';
 import '../../models/carbon_activity/carbon_activity_schema.dart';
-import '../../models/object_box/object_box.dart';
 import '../../objectbox.g.dart';
 
 class CarbonFootprintServiceObjectBox implements CarbonFootprintService {
+  final Store store;
+
+  const CarbonFootprintServiceObjectBox({
+    required this.store,
+  });
+
   @override
   Stream<double> getTodaysEmissions() async* {
     final box = store.box<CarbonActivitySchema>();

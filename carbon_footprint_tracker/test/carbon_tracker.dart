@@ -11,6 +11,10 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/tracker_st
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/objectbox.g.dart';
+import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
+import 'package:carbon_footprint_tracker/services/activity/activity_service.objectbox.dart';
+import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
+import 'package:carbon_footprint_tracker/services/logging/logging_service.objectbox.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -66,22 +70,34 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
+    container.updateOverrides([
+      activityServiceProvider
+          .overrideWithValue(ActivityServiceObjectBox(store: store)),
+      loggingServiceProvider
+          .overrideWithValue(LoggingServiceObjectBox(store: store)),
+    ]);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: const Stream<TrackerEvent>.empty(),
-      store: store,
+      activityService: container.read(activityServiceProvider),
+      loggingService: container.read(loggingServiceProvider),
     );
 
     expect(carbonTracker.machine.current?.identifier, const IdleState());
   });
 
   test('State machine change state', () async {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
-      store: store,
+      activityService: container.read(activityServiceProvider),
+      loggingService: container.read(loggingServiceProvider),
     );
 
     eventStreamController.add(WalkingEvent());
@@ -92,11 +108,15 @@ void main() {
   });
 
   test('State machine change state 2', () async {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
-      store: store,
+      activityService: container.read(activityServiceProvider),
+      loggingService: container.read(loggingServiceProvider),
     );
 
     eventStreamController.add(InVehicleEvent());
