@@ -10,17 +10,17 @@ import '../carbon_tracker/events/tracker_event.dart';
 class Geo {
   static Stream<TrackerEvent> get stream {
     const distanceFilter = 50; // meters
-    const minPositionAccuracy = 50; // percent
+    // const minPositionAccuracy = 50; // percent
     const flyingAltitude = 300; // meters
     const flyingSpeed = 55; // meters/second
 
     LocationSettings locationSettings = const LocationSettings(
-      distanceFilter: distanceFilter,
+      // distanceFilter: distanceFilter,
     );
 
     final Stream<TrackerEvent> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
-            .where((position) => position.accuracy > minPositionAccuracy)
+            // .where((position) => position.accuracy > minPositionAccuracy)
             .map((position) {
       return PositionUpdateEvent(position);
     });
@@ -28,7 +28,7 @@ class Geo {
     final Stream<TrackerEvent> altitudeStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .where((position) =>
-                position.accuracy > minPositionAccuracy &&
+                // position.accuracy > minPositionAccuracy &&
                 position.altitude > flyingAltitude &&
                 position.speed > flyingSpeed)
             .map((position) {

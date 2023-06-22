@@ -30,6 +30,8 @@ class _MyAppState extends ConsumerState<MyApp> {
     ));
   }
 
+  int i = 0;
+
   @override
   Widget build(BuildContext context) {
     ref.watch(carbonTrackerProvider);

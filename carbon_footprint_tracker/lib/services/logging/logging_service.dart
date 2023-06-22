@@ -12,4 +12,6 @@ abstract class LoggingService {
   List<EventLog> getLogs();
 
   void logEvent(EventLog eventLog);
+
+  void clearLogs();
 }

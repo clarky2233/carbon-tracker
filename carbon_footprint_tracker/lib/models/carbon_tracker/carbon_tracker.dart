@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/vehicle_state.dart';
@@ -13,6 +15,7 @@ import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:statemachine/statemachine.dart';
+import 'events/accelerometer_event.dart';
 import 'events/tracker_event.dart';
 
 class CarbonTracker {
@@ -20,13 +23,9 @@ class CarbonTracker {
   TrackerContext context;
   Stream<TrackerEvent> eventStream;
 
-  // Store store;
   List<TrackerState> states;
   ActivityService activityService;
-  LoggingService loggingService;
-
-  // late Box<CarbonActivitySchema> activityBox;
-  // late Box<EventLog> eventBox;
+  LoggingService logger;
 
   static const List<TrackerState> _defaultStates = [
     IdleState(),
@@ -42,13 +41,10 @@ class CarbonTracker {
     required this.machine,
     required this.context,
     required this.eventStream,
-    required this.loggingService,
+    required this.logger,
     required this.activityService,
     this.states = _defaultStates,
   }) {
-    // activityBox = store.box<CarbonActivitySchema>();
-    // eventBox = store.box<EventLog>();
-
     // Initialize states in state machine
     for (TrackerState state in states) {
       State<TrackerState> newState = machine.newState(state);
@@ -58,7 +54,18 @@ class CarbonTracker {
     for (State<TrackerState> state in _registeredStates.values) {
       // Define transitions between states
       state.onStream(eventStream, (event) async {
-        // _logEvent(event);
+        if (event is! TMDSensorEvent) {
+          logger.logEvent(EventLog(
+            dateTime: DateTime.now(),
+            event: "Event received: ${event.name}",
+          ));
+        } else if (state.identifier is WalkingState) {
+          logger.logEvent(EventLog(
+            dateTime: DateTime.now(),
+            event: "Event received: ${event.name}",
+          ));
+        }
+
         await _transition(state, event);
       });
 
@@ -74,40 +81,48 @@ class CarbonTracker {
 
   Future<void> _transition(
       State<TrackerState> state, TrackerEvent event) async {
-    final transitionResult = state.identifier.transition(event);
+    try {
+      // Get transition (state change hasn't happened yet)
+      final transitionResult = state.identifier.transition(event);
 
-    if (transitionResult == null) return;
-
-    // Perform action
-    if (transitionResult.action != null) {
-      await transitionResult.action!(context, event);
-    }
-
-    // Create Activity
-    if (transitionResult.autoCreateActivity &&
-        state.identifier.filter(context)) {
-      await createActivity(state.identifier);
-    }
-
-    // Reset Context
-    if (transitionResult.resetContext) {
-      context = TrackerContext();
-    }
-
-    // Change State
-    if (transitionResult.nextState != state.identifier) {
-      if (transitionResult.nextState.transportMode != null) {
-        context.transportMode = transitionResult.nextState.transportMode!;
+      if (transitionResult == null) {
+        // logger.logEvent(EventLog(
+        //   dateTime: DateTime.now(),
+        //   event:
+        //       "No transition table entry for state (${state.identifier.name}) and event (${event.name})",
+        // ));
+        return;
       }
-      _registeredStates[transitionResult.nextState]?.enter();
-    }
-  }
 
-  void _logEvent(TrackerEvent event) {
-    loggingService.logEvent(EventLog(
-      event: event.name,
-      dateTime: DateTime.now(),
-    ));
+      // Perform action
+      await transitionResult.action?.call(context, event);
+
+      // Create Activity
+      if (transitionResult.autoCreateActivity &&
+          state.identifier.filter(context)) {
+        await createActivity(state.identifier);
+      }
+
+      // Reset Context
+      if (transitionResult.resetContext) {
+        context = TrackerContext(
+          logger: logger,
+          transportMode: transitionResult.nextState.transportMode,
+          rf: context.rf,
+        );
+      }
+
+      // Change State
+      if (transitionResult.nextState != state.identifier) {
+        _registeredStates[transitionResult.nextState]?.enter();
+      }
+    } catch (error) {
+      log(error.toString(), stackTrace: StackTrace.current);
+      logger.logEvent(EventLog(
+        dateTime: DateTime.now(),
+        event: error.toString(),
+      ));
+    }
   }
 
   Future<void> createActivity(TrackerState state) async {
@@ -151,7 +166,11 @@ class CarbonTracker {
 
     // Save activity to database
     activityService.saveActivity(activity.toActivity());
-    // activityBox.put(activity);
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "Activity created: ${activity.transportMode}",
+    ));
   }
 
   bool _combineActivity(CarbonActivitySchema activity) {
@@ -161,6 +180,7 @@ class CarbonTracker {
 
     // Last activity is a different type
     if (activity.type != lastActivity.type) return false;
+    if (activity.transportMode != lastActivity.transportMode) return false;
 
     final timeDifference =
         activity.startedAt.difference(lastActivity.endedAt!).inMinutes;
@@ -193,8 +213,12 @@ class CarbonTracker {
       ..endPostcode = activity.endPostcode
       ..endSubLocality = activity.endSubLocality;
 
-    // activityBox.put(lastActivity, mode: PutMode.update);
     activityService.updateActivity(lastActivity.toActivity());
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "Activity combined: ${lastActivity.transportMode}",
+    ));
 
     return true;
   }

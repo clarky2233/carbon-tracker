@@ -24,11 +24,12 @@ class TransitionTable {
     Transition(currentState: const IdleState(),     event: InVehicleEvent()):               TransitionResult(nextState: const VehicleState(), autoCreateActivity: false),
     // Transition(currentState: const IdleState(),     event: TMDSensorEvent()):               TransitionResult(nextState: const IdleState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
     // Walking
-    Transition(currentState: const WalkingState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState()),
+    Transition(currentState: const WalkingState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState(), action: (context, _) => context.assignVehicle()),
     Transition(currentState: const WalkingState(),  event: RunningEvent()):                 TransitionResult(nextState: const WalkingState(), resetContext: false),
     Transition(currentState: const WalkingState(),  event: OnBicycleEvent()):               TransitionResult(nextState: const CyclingState()),
     Transition(currentState: const WalkingState(),  event: InVehicleEvent()):               TransitionResult(nextState: const VehicleState()),
     Transition(currentState: const WalkingState(),  event: PositionUpdateEvent()):          TransitionResult(nextState: const WalkingState(), action: (context, event) => context.updateDistance(event as PositionUpdateEvent), resetContext: false, autoCreateActivity: false),
+    Transition(currentState: const WalkingState(),  event: TMDSensorEvent()):               TransitionResult(nextState: const WalkingState(), action: (context, event) => context.transportModeDetection(event as TMDSensorEvent), resetContext: false, autoCreateActivity: false),
     // Cycling
     Transition(currentState: const CyclingState(),  event: StillEvent()):                   TransitionResult(nextState: const IdleState()),
     Transition(currentState: const CyclingState(),  event: WalkingEvent()):                 TransitionResult(nextState: const WalkingState()),

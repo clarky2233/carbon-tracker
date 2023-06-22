@@ -82,7 +82,7 @@ void main() {
       context: TrackerContext(),
       eventStream: const Stream<TrackerEvent>.empty(),
       activityService: container.read(activityServiceProvider),
-      loggingService: container.read(loggingServiceProvider),
+      logger: container.read(loggingServiceProvider),
     );
 
     expect(carbonTracker.machine.current?.identifier, const IdleState());
@@ -97,7 +97,7 @@ void main() {
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
       activityService: container.read(activityServiceProvider),
-      loggingService: container.read(loggingServiceProvider),
+      logger: container.read(loggingServiceProvider),
     );
 
     eventStreamController.add(WalkingEvent());
@@ -116,7 +116,7 @@ void main() {
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
       activityService: container.read(activityServiceProvider),
-      loggingService: container.read(loggingServiceProvider),
+      logger: container.read(loggingServiceProvider),
     );
 
     eventStreamController.add(InVehicleEvent());

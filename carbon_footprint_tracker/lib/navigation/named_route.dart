@@ -23,6 +23,10 @@ class NamedRoute {
     name: "tracking-settings",
     path: "tracking-settings",
   );
+  static NamedRoute logs = NamedRoute(
+    name: "logs",
+    path: "logs",
+  );
 
   static NamedRoute questionnaire = NamedRoute(
     name: "questionnaire",
@@ -38,5 +42,4 @@ class NamedRoute {
     name: 'transport-input',
     path: "/transport-input",
   );
-
 }

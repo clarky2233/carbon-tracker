@@ -11,13 +11,23 @@ class LoggingServiceObjectBox implements LoggingService {
 
   @override
   List<EventLog> getLogs() {
-    // TODO: implement getLogs
-    throw UnimplementedError();
+    final box = store.box<EventLog>();
+
+    final query =
+        box.query().order(EventLog_.dateTime, flags: Order.descending);
+
+    return query.build().find();
   }
 
   @override
   void logEvent(EventLog eventLog) {
     final box = store.box<EventLog>();
     box.put(eventLog);
+  }
+
+  @override
+  void clearLogs() {
+    final box = store.box<EventLog>();
+    box.removeAll();
   }
 }

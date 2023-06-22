@@ -274,7 +274,7 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
 
   @override
   MovementActivity toActivity(CarbonActivitySchema schema) {
-    return MovementActivity(
+    final activity = MovementActivity(
       id: schema.id,
       startedAt: schema.startedAt,
       endedAt: schema.endedAt!,
@@ -294,10 +294,14 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
       endCountry: schema.endCountry,
       endPostcode: schema.endPostcode,
       endSubLocality: schema.endSubLocality,
-      vehicleSize: schema.vehicleSize ?? VehicleSize.none,
-      fuelType: schema.fuelType ?? FuelType.none,
-      transportMode: schema.transportMode!,
+      transportMode: schema.transportMode ?? TransportMode.flying,
     );
+    activity
+      ..vehicleSize =
+          schema.vehicleSize ?? activity.transportMode.defaultVehicleSize
+      ..fuelType = schema.fuelType ?? activity.transportMode.defaultFuelType;
+
+    return activity;
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:developer' as dev;
 import 'package:carbon_footprint_tracker/extensions/stream_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/sensors/tmd_features.dart';
@@ -16,13 +16,19 @@ class Sensors {
           gyroscopeStream(windowSize),
           magnetometerStream(windowSize),
         ])
-        .where((events) =>
-            events.map((e) => (e['id'] ?? 0).toInt()).toSet().length == 1)
+        .handleError((error) {
+          dev.log("1234567");
+          dev.log(error.toString());
+        })
+        // .where((events) =>
+        //     events.map((e) => (e['id'] ?? 0).toInt()).toSet().length == 1)
         .map(
           (events) {
             final accMap = events[0];
             final gyroMap = events[1];
             final magMap = events[2];
+
+            dev.log("${accMap['id']} TMD Sensor Event!!!!");
 
             return TMDSensorEvent(TMDFeatures(
               accelerometerMin: accMap['min']!,
@@ -45,48 +51,63 @@ class Sensors {
   static Stream<Map<String, double>> accelerometerStream(Duration windowSize) {
     double i = 0;
     return accelerometerEvents
+        .handleError((error) {
+          dev.log(error.toString());
+        })
         .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
         .window(windowSize)
         .map((window) {
-      return {
-        "id": ++i,
-        "min": window.min,
-        "max": window.max,
-        "mean": window.average,
-        "std": window.standardDeviation,
-      };
-    });
+          final data = {
+            "id": ++i,
+            "min": window.min,
+            "max": window.max,
+            "mean": window.average,
+            "std": window.standardDeviation,
+          };
+          // dev.log(data.toString());
+          return data;
+        });
   }
 
   static Stream<Map<String, double>> gyroscopeStream(Duration windowSize) {
     double i = 0;
     return gyroscopeEvents
+        .handleError((error) {
+          dev.log(error.toString());
+        })
         .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
         .window(windowSize)
         .map((window) {
-      return {
-        "id": ++i,
-        "min": window.min,
-        "max": window.max,
-        "mean": window.average,
-        "std": window.standardDeviation,
-      };
-    });
+          final data = {
+            "id": ++i,
+            "min": window.min,
+            "max": window.max,
+            "mean": window.average,
+            "std": window.standardDeviation,
+          };
+          // dev.log(data.toString());
+          return data;
+        });
   }
 
   static Stream<Map<String, double>> magnetometerStream(Duration windowSize) {
     double i = 0;
     return magnetometerEvents
+        .handleError((error) {
+          dev.log(error.toString());
+        })
         .map((data) => sqrt(pow(data.x, 2) + pow(data.y, 2) + pow(data.z, 2)))
         .window(windowSize)
         .map((window) {
-      return {
-        "id": ++i,
-        "min": window.min,
-        "max": window.max,
-        "mean": window.average,
-        "std": window.standardDeviation,
-      };
-    });
+          final data = {
+            "id": ++i,
+            "min": window.min,
+            "max": window.max,
+            "mean": window.average,
+            "std": window.standardDeviation,
+          };
+          // dev.log(data.toString());
+          return data;
+        });
   }
 }

@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:carbon_footprint_tracker/extensions/map_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/position_update_event.dart';
+import 'package:carbon_footprint_tracker/models/event_log/event_log.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sklite/ensemble/forest.dart';
 import 'package:sklite/utils/io.dart';
 
+import '../../services/logging/logging_service.dart';
 import '../carbon_activity/constants/transport_mode.dart';
 
 class TrackerContext {
@@ -20,7 +22,9 @@ class TrackerContext {
   String? tmdModelPath;
   RandomForestClassifier? rf;
   Map<TransportMode, int> vehiclePrediction;
-  late TransportMode transportMode;
+  TransportMode? transportMode;
+
+  LoggingService logger;
 
   TrackerContext({
     DateTime? currentActivityStartTime,
@@ -28,6 +32,9 @@ class TrackerContext {
     this.distance = 0,
     this.distanceThreshold = 50,
     this.tmdModelPath,
+    this.transportMode,
+    this.rf,
+    required this.logger,
   })  : startTime = currentActivityStartTime ?? DateTime.now(),
         vehiclePrediction = vehiclePrediction ?? {} {
     _loadModel();
@@ -35,9 +42,26 @@ class TrackerContext {
 
   Future<void> _loadModel() async {
     if (tmdModelPath == null) return;
-    await loadModel(tmdModelPath!).then((x) {
-      rf = RandomForestClassifier.fromMap(json.decode(x));
-    });
+    if (rf != null) return;
+    try {
+      final modelString = await loadModel(tmdModelPath!);
+      rf = RandomForestClassifier.fromMap(json.decode(modelString));
+    } catch (error) {
+      logger.logEvent(EventLog(
+        dateTime: DateTime.now(),
+        event: "Unable to load model",
+      ));
+    }
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "Model Loaded!",
+    ));
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "RF is not null: ${rf != null}",
+    ));
     // tmdModel = await PyTorchMobile.loadModel(tmdModelPath!);
   }
 
@@ -48,15 +72,17 @@ class TrackerContext {
       startPosition!.longitude,
     ).onError((error, stackTrace) => []);
 
+    latestPosition = startPosition;
+
     if (placemarks.isNotEmpty) {
       startPlacemark = placemarks.first;
     }
   }
 
   void updateDistance(PositionUpdateEvent event) {
-    if (startPosition == null) return;
+    if (startPosition == null || latestPosition == null) return;
 
-    Position start = latestPosition == null ? startPosition! : latestPosition!;
+    Position start = latestPosition!;
 
     double newDistance = Geolocator.distanceBetween(
       start.latitude,
@@ -65,14 +91,26 @@ class TrackerContext {
       event.position!.longitude,
     );
 
-    if (newDistance < distanceThreshold) return;
+    // if (newDistance < distanceThreshold) return;
 
     latestPosition = event.position;
     distance += newDistance;
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event:
+          "Distance updated: +${newDistance.toInt()}m -> ${distance.toInt()}m",
+    ));
   }
 
   void transportModeDetection(TMDSensorEvent event) {
-    if (rf == null) return;
+    if (rf == null) {
+      logger.logEvent(EventLog(
+        dateTime: DateTime.now(),
+        event: "Classifier is null",
+      ));
+      return;
+    }
 
     final vehicles = [
       TransportMode.bus,
@@ -82,6 +120,11 @@ class TrackerContext {
 
     final prediction = rf!.predict(event.features.input);
 
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "TMD prediction: ${vehicles[prediction].name}",
+    ));
+
     vehiclePrediction.update(
       vehicles[prediction],
       (value) => ++value,
@@ -90,6 +133,11 @@ class TrackerContext {
   }
 
   void assignVehicle() {
-    transportMode = vehiclePrediction.max() ?? TransportMode.car;
+    transportMode = vehiclePrediction.max();
+
+    logger.logEvent(EventLog(
+      dateTime: DateTime.now(),
+      event: "Final TMD prediction: ${transportMode?.name}",
+    ));
   }
 }
