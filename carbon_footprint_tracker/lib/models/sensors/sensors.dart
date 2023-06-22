@@ -11,41 +11,41 @@ import 'package:statistics/statistics.dart';
 
 class Sensors {
   static Stream<TrackerEvent> stream(Duration windowSize) {
-    return accelerometerStream(windowSize)
-        .combineLatestAll([
-          gyroscopeStream(windowSize),
-          magnetometerStream(windowSize),
-        ])
-        .handleError((error) {
-          dev.log("1234567");
-          dev.log(error.toString());
-        })
+    return accelerometerStream(windowSize).combineLatestAll([
+      gyroscopeStream(windowSize),
+      magnetometerStream(windowSize),
+    ]).handleError((error) {
+      dev.log("1234567");
+      dev.log(error.toString());
+    })
+    .throttle(windowSize, trailing: true)
         // .where((events) =>
         //     events.map((e) => (e['id'] ?? 0).toInt()).toSet().length == 1)
         .map(
-          (events) {
-            final accMap = events[0];
-            final gyroMap = events[1];
-            final magMap = events[2];
+      (events) {
+        final accMap = events[0];
+        final gyroMap = events[1];
+        final magMap = events[2];
 
-            dev.log("${accMap['id']} TMD Sensor Event!!!!");
+        dev.log(
+            "${accMap['id']} ${gyroMap['id']} ${magMap['id']} TMD Sensor Event!!!!");
 
-            return TMDSensorEvent(TMDFeatures(
-              accelerometerMin: accMap['min']!,
-              accelerometerMax: accMap['max']!,
-              accelerometerMean: accMap['mean']!,
-              accelerometerStd: accMap['std']!,
-              gyroscopeMin: gyroMap['min']!,
-              gyroscopeMax: gyroMap['max']!,
-              gyroscopeMean: gyroMap['mean']!,
-              gyroscopeStd: gyroMap['std']!,
-              magnetometerMin: magMap['min']!,
-              magnetometerMax: magMap['max']!,
-              magnetometerMean: magMap['mean']!,
-              magnetometerStd: magMap['std']!,
-            ));
-          },
-        );
+        return TMDSensorEvent(TMDFeatures(
+          accelerometerMin: accMap['min']!,
+          accelerometerMax: accMap['max']!,
+          accelerometerMean: accMap['mean']!,
+          accelerometerStd: accMap['std']!,
+          gyroscopeMin: gyroMap['min']!,
+          gyroscopeMax: gyroMap['max']!,
+          gyroscopeMean: gyroMap['mean']!,
+          gyroscopeStd: gyroMap['std']!,
+          magnetometerMin: magMap['min']!,
+          magnetometerMax: magMap['max']!,
+          magnetometerMean: magMap['mean']!,
+          magnetometerStd: magMap['std']!,
+        ));
+      },
+    );
   }
 
   static Stream<Map<String, double>> accelerometerStream(Duration windowSize) {
