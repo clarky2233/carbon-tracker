@@ -15,7 +15,6 @@ class Sensors {
       gyroscopeStream(windowSize),
       magnetometerStream(windowSize),
     ]).handleError((error) {
-      dev.log("1234567");
       dev.log(error.toString());
     })
     .throttle(windowSize, trailing: true)
@@ -27,8 +26,8 @@ class Sensors {
         final gyroMap = events[1];
         final magMap = events[2];
 
-        dev.log(
-            "${accMap['id']} ${gyroMap['id']} ${magMap['id']} TMD Sensor Event!!!!");
+        // dev.log(
+        //     "${accMap['id']} ${gyroMap['id']} ${magMap['id']} TMD Sensor Event!!!!");
 
         return TMDSensorEvent(TMDFeatures(
           accelerometerMin: accMap['min']!,

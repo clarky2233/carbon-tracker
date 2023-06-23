@@ -180,6 +180,10 @@ class MovementActivity implements CarbonActivity {
         category: EmissionCategory.transport,
         transportMode: transportMode,
       ),
+      TransportMode.flying: EmissionDetails(
+        category: EmissionCategory.transport,
+        transportMode: transportMode,
+      ),
     };
 
     EmissionDetails? details = detailsMap[transportMode];

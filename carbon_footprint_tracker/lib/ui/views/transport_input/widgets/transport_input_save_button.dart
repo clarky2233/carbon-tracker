@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class TransportInputSaveButton extends ConsumerWidget {
+  final GlobalKey<FormState> formKey;
+
   const TransportInputSaveButton({
     Key? key,
+    required this.formKey,
   }) : super(key: key);
 
   @override
@@ -13,9 +16,15 @@ class TransportInputSaveButton extends ConsumerWidget {
     final notifier = ref.watch(newTripProvider.notifier);
 
     return FilledButton.icon(
-      onPressed: () {
-        notifier.saveActivity();
-        context.pop();
+      onPressed: () async {
+        if (!(formKey.currentState?.validate() ?? false)) return;
+        formKey.currentState!.save();
+
+        final success = await notifier.saveActivity();
+
+        if (context.mounted && success) {
+          context.pop();
+        }
       },
       icon: const Icon(Icons.done),
       label: const Text("Save"),

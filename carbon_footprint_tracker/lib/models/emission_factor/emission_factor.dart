@@ -127,12 +127,22 @@ class EmissionFactor {
       category: EmissionCategory.transport,
       transportMode: TransportMode.bus,
       fuelType: FuelType.diesel,
-    ): -1,
+    ): 0.137,
+    // https://www.linkedin.com/pulse/greenhouse-emissions-from-travel-sydney-leon-arundell
     EmissionDetails(
       category: EmissionCategory.transport,
       transportMode: TransportMode.bus,
       fuelType: FuelType.electric,
-    ): -1,
+    ): 0,
+    EmissionDetails(
+      category: EmissionCategory.transport,
+      transportMode: TransportMode.train,
+    ): 0.079,
+    // https://www.linkedin.com/pulse/greenhouse-emissions-from-travel-sydney-leon-arundell
+    EmissionDetails(
+      category: EmissionCategory.transport,
+      transportMode: TransportMode.flying,
+    ): 0.115,
     EmissionDetails(
       category: EmissionCategory.electricity,
     ): 0.531,

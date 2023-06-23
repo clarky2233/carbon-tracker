@@ -77,12 +77,14 @@ void main() {
           .overrideWithValue(LoggingServiceObjectBox(store: store)),
     ]);
 
+    final logger = container.read(loggingServiceProvider);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
-      context: TrackerContext(),
+      context: TrackerContext(logger: logger),
       eventStream: const Stream<TrackerEvent>.empty(),
       activityService: container.read(activityServiceProvider),
-      logger: container.read(loggingServiceProvider),
+      logger: logger,
     );
 
     expect(carbonTracker.machine.current?.identifier, const IdleState());
@@ -92,12 +94,14 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
+    final logger = container.read(loggingServiceProvider);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
-      context: TrackerContext(),
+      context: TrackerContext(logger: logger),
       eventStream: eventStreamController.stream,
       activityService: container.read(activityServiceProvider),
-      logger: container.read(loggingServiceProvider),
+      logger: logger,
     );
 
     eventStreamController.add(WalkingEvent());
@@ -111,12 +115,14 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
+    final logger = container.read(loggingServiceProvider);
+
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
-      context: TrackerContext(),
+      context: TrackerContext(logger: logger),
       eventStream: eventStreamController.stream,
       activityService: container.read(activityServiceProvider),
-      logger: container.read(loggingServiceProvider),
+      logger: logger,
     );
 
     eventStreamController.add(InVehicleEvent());

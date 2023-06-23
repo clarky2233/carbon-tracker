@@ -201,7 +201,8 @@ class CarbonTracker {
       - time difference is less than 60 minutes
     */
 
-    if (distanceBetween > 50 || timeDifference > 60) return false;
+    if (timeDifference > 60) return false;
+    // if (distanceBetween > 50 || timeDifference > 60) return false;
 
     // Combine the activities
     lastActivity

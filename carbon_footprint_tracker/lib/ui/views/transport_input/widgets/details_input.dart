@@ -26,7 +26,7 @@ class DetailsInput extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16),
           child: Text(
-            "Details",
+            "Vehicle Details",
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),

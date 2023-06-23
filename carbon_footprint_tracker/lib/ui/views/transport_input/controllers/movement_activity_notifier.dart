@@ -3,6 +3,8 @@ import 'package:carbon_footprint_tracker/services/activity/activity_service.dart
 import 'package:dart_date/dart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../../models/carbon_activity/constants/fuel_type.dart';
 import '../../../../models/carbon_activity/constants/transport_mode.dart';
@@ -102,9 +104,82 @@ class MovementActivityNotifier extends AutoDisposeNotifier<MovementActivity> {
     state = state.copyWith(fuelType: fuelType);
   }
 
-  void saveActivity() {
-    state.estimateDistance();
+  void setStartStreet(String startLocation) {
+    state = state.copyWith(startStreet: startLocation);
+  }
+
+  void setEndStreet(String destination) {
+    state = state.copyWith(endStreet: destination);
+  }
+
+  Future<bool> setStartPosition() async {
+    List<Location> startLocations =
+        await locationFromAddress(state.startStreet!);
+    if (startLocations.isEmpty) return false;
+    state
+      ..startLat = startLocations.first.latitude
+      ..startLong = startLocations.first.longitude;
+
+    List<Placemark> startPlacemarks = await placemarkFromCoordinates(
+      state.startLat,
+      state.startLong,
+    ).onError((error, stackTrace) => []);
+
+    Placemark? startPlacemark;
+    if (startPlacemarks.isNotEmpty) startPlacemark = startPlacemarks.first;
+    state
+      ..startStreet = startPlacemark?.street
+      ..startAdministrativeArea = startPlacemark?.administrativeArea
+      ..startCountry = startPlacemark?.country
+      ..startPostcode = startPlacemark?.postalCode
+      ..startSubLocality = startPlacemark?.subLocality;
+
+    return true;
+  }
+
+  Future<bool> setEndPosition() async {
+    List<Location> destinations = await locationFromAddress(state.endStreet!);
+    if (destinations.isEmpty) return false;
+    state
+      ..endLat = destinations.first.latitude
+      ..endLong = destinations.first.longitude;
+
+    List<Placemark> endPlacemarks = await placemarkFromCoordinates(
+      state.endLat,
+      state.endLong,
+    ).onError((error, stackTrace) => []);
+
+    Placemark? endPlacemark;
+    if (endPlacemarks.isNotEmpty) endPlacemark = endPlacemarks.first;
+    state
+      ..endStreet = endPlacemark?.street
+      ..endAdministrativeArea = endPlacemark?.administrativeArea
+      ..endCountry = endPlacemark?.country
+      ..endPostcode = endPlacemark?.postalCode
+      ..endSubLocality = endPlacemark?.subLocality;
+
+    state.distance = Geolocator.distanceBetween(
+      state.startLat,
+      state.startLong,
+      state.endLat,
+      state.endLong,
+    );
+
+    return true;
+  }
+
+  Future<bool> saveActivity() async {
+    bool check = false;
+
+    check = await setStartPosition();
+    if (!check) return check;
+
+    check = await setEndPosition();
+    if (!check) return check;
+
     activityService.saveActivity(state);
+
+    return true;
   }
 }
 
