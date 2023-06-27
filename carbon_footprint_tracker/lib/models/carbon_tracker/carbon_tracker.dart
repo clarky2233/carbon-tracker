@@ -15,7 +15,6 @@ import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:statemachine/statemachine.dart';
-import 'events/accelerometer_event.dart';
 import 'events/tracker_event.dart';
 
 class CarbonTracker {
@@ -54,17 +53,10 @@ class CarbonTracker {
     for (State<TrackerState> state in _registeredStates.values) {
       // Define transitions between states
       state.onStream(eventStream, (event) async {
-        if (event is! TMDSensorEvent) {
-          logger.logEvent(EventLog(
-            dateTime: DateTime.now(),
-            event: "Event received: ${event.name}",
-          ));
-        } else if (state.identifier is WalkingState) {
-          logger.logEvent(EventLog(
-            dateTime: DateTime.now(),
-            event: "Event received: ${event.name}",
-          ));
-        }
+        logger.logEvent(EventLog(
+          dateTime: DateTime.now(),
+          event: "Event received: ${event.name}",
+        ));
 
         await _transition(state, event);
       });
@@ -186,12 +178,12 @@ class CarbonTracker {
         activity.startedAt.difference(lastActivity.endedAt!).inMinutes;
 
     // Calculate distance between last activity
-    double distanceBetween = Geolocator.distanceBetween(
-      lastActivity.endLat!,
-      lastActivity.endLong!,
-      activity.startLat!,
-      activity.startLong!,
-    );
+    // double distanceBetween = Geolocator.distanceBetween(
+    //   lastActivity.endLat!,
+    //   lastActivity.endLong!,
+    //   activity.startLat!,
+    //   activity.startLong!,
+    // );
 
     /*
     Rules for combining activities.

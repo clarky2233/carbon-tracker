@@ -15,7 +15,7 @@ class Geo {
     const flyingSpeed = 55; // meters/second
 
     LocationSettings locationSettings = const LocationSettings(
-      // distanceFilter: distanceFilter,
+      distanceFilter: distanceFilter,
     );
 
     final Stream<TrackerEvent> positionStream =

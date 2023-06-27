@@ -14,10 +14,26 @@ import '../carbon_tracker.dart';
 import '../events/tracker_event.dart';
 import '../states/tracker_state.dart';
 
-final eventsProvider = rp.StreamProvider<TrackerEvent>((ref) async* {
+// final eventsProvider = rp.StreamProvider<TrackerEvent>((ref) async* {
+//   final logger = ref.watch(loggingServiceProvider);
+//
+//   yield* StreamGroup.merge<TrackerEvent>([
+//     ActivityRecognition.stream,
+//     Geo.stream,
+//     Sensors.stream(const Duration(seconds: 5)),
+//   ]).handleError((error, stackTrace) {
+//     log(error.toString());
+//     logger.logEvent(EventLog(
+//       dateTime: DateTime.now(),
+//       event: "Event stream error: ${error.toString()}",
+//     ));
+//   });
+// });
+
+final eventsProvider = rp.StateProvider<Stream<TrackerEvent>>((ref) {
   final logger = ref.watch(loggingServiceProvider);
 
-  yield* StreamGroup.merge<TrackerEvent>([
+  return StreamGroup.merge<TrackerEvent>([
     ActivityRecognition.stream,
     Geo.stream,
     Sensors.stream(const Duration(seconds: 5)),
@@ -32,7 +48,8 @@ final eventsProvider = rp.StreamProvider<TrackerEvent>((ref) async* {
 
 final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
   // ignore: deprecated_member_use
-  final eventStream = ref.watch(eventsProvider.stream);
+  // final eventStream = ref.watch(eventsProvider.stream);
+  final eventStream = ref.watch(eventsProvider);
 
   final activityService = ref.watch(activityServiceProvider);
   final loggingService = ref.watch(loggingServiceProvider);
@@ -40,7 +57,7 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
   final tracker = CarbonTracker(
     machine: Machine<TrackerState>(),
     context: TrackerContext(
-      tmdModelPath: 'assets/models/tmd_rf_acc_mag.json',
+      tmdModelPath: 'assets/models/tmd_rf.json',
       logger: loggingService,
     ),
     eventStream: eventStream,
