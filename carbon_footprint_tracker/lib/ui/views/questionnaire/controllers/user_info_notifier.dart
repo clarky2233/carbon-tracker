@@ -7,12 +7,9 @@ import '../../../../models/carbon_activity/constants/food_consumption.dart';
 import '../../../../models/carbon_activity/constants/fuel_type.dart';
 
 class UserInfoNotifier extends Notifier<UserInfo> {
-  late QuestionnaireService questionnaireService;
-
   @override
   UserInfo build() {
-    questionnaireService = ref.watch(questionnaireServiceProvider);
-    return questionnaireService.getAnswers();
+    return QuestionnaireService.instance.getAnswers();
   }
 
   void setTransportMode(TransportMode transportMode) {
@@ -40,7 +37,7 @@ class UserInfoNotifier extends Notifier<UserInfo> {
   }
 
   void save() {
-    questionnaireService.saveAnswers(state);
+    QuestionnaireService.instance.saveAnswers(state);
   }
 }
 

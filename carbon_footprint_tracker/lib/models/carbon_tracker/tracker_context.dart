@@ -24,8 +24,6 @@ class TrackerContext {
   Map<TransportMode, int> vehiclePrediction;
   TransportMode? transportMode;
 
-  LoggingService logger;
-
   TrackerContext({
     DateTime? currentActivityStartTime,
     Map<TransportMode, int>? vehiclePrediction,
@@ -34,7 +32,6 @@ class TrackerContext {
     this.tmdModelPath,
     this.transportMode,
     this.rf,
-    required this.logger,
   })  : startTime = currentActivityStartTime ?? DateTime.now(),
         vehiclePrediction = vehiclePrediction ?? {} {
     _loadModel();
@@ -47,18 +44,18 @@ class TrackerContext {
       final modelString = await loadModel(tmdModelPath!);
       rf = RandomForestClassifier.fromMap(json.decode(modelString));
     } catch (error) {
-      logger.logEvent(EventLog(
+      LoggingService.instance.logEvent(EventLog(
         dateTime: DateTime.now(),
         event: "Unable to load model",
       ));
     }
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "Model Loaded!",
     ));
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "RF is not null: ${rf != null}",
     ));
@@ -96,7 +93,7 @@ class TrackerContext {
     latestPosition = event.position;
     distance += newDistance;
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event:
           "Distance updated: +${newDistance.toInt()}m -> ${distance.toInt()}m",
@@ -105,7 +102,7 @@ class TrackerContext {
 
   void transportModeDetection(TMDSensorEvent event) {
     if (rf == null) {
-      logger.logEvent(EventLog(
+      LoggingService.instance.logEvent(EventLog(
         dateTime: DateTime.now(),
         event: "Classifier is null",
       ));
@@ -120,7 +117,7 @@ class TrackerContext {
 
     final prediction = rf!.predict(event.features.input);
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "TMD prediction: ${vehicles[prediction].name}",
     ));
@@ -135,7 +132,7 @@ class TrackerContext {
   void assignVehicle() {
     transportMode = vehiclePrediction.max();
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "Final TMD prediction: ${transportMode?.name}",
     ));

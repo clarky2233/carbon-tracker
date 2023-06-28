@@ -1,10 +1,10 @@
 import 'package:carbon_footprint_tracker/extensions/string_extensions.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/cycling_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/vehicle_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/flying_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/idle_state.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_state.dart';
-import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../carbon_activity/constants/transport_mode.dart';
@@ -20,7 +20,7 @@ abstract class TrackerState {
 
   const TrackerState();
 
-  bool filter(TrackerContext context);
+  bool filter(CarbonActivitySchema carbonActivitySchema);
 
   TransitionResult? transition(TrackerEvent event) {
     final transition = Transition(currentState: this, event: event);

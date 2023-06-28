@@ -1,14 +1,16 @@
+import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/models/user_info/user_info.dart';
 import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.dart';
 
 import '../../objectbox.g.dart';
 
 class QuestionnaireServiceObjectBox implements QuestionnaireService {
-  final Store store;
+  QuestionnaireServiceObjectBox._constructor();
 
-  const QuestionnaireServiceObjectBox({
-    required this.store,
-  });
+  static final QuestionnaireServiceObjectBox _instance =
+      QuestionnaireServiceObjectBox._constructor();
+
+  static QuestionnaireServiceObjectBox get instance => _instance;
 
   @override
   void saveAnswers(UserInfo userInfo) {

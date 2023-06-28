@@ -1,13 +1,14 @@
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/models/user_info/user_info.dart';
 import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.objectbox.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final questionnaireServiceProvider = Provider<QuestionnaireService>((ref) {
-  return QuestionnaireServiceObjectBox(store: store);
-});
 
 abstract class QuestionnaireService {
+  QuestionnaireService._constructor();
+
+  static final QuestionnaireService _instance =
+      QuestionnaireServiceObjectBox.instance;
+
+  static QuestionnaireService get instance => _instance;
+
   UserInfo getAnswers();
 
   void saveAnswers(UserInfo userInfo);

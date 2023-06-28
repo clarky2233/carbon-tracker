@@ -2,7 +2,7 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transp
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/tracker_state.dart';
 import 'package:flutter/material.dart';
 
-import '../tracker_context.dart';
+import '../../carbon_activity/carbon_activity_schema.dart';
 
 class CyclingState extends TrackerState {
   @override
@@ -15,8 +15,15 @@ class CyclingState extends TrackerState {
   TransportMode? get transportMode => TransportMode.cycling;
 
   @override
-  bool filter(TrackerContext context) {
-    return true;
+  bool filter(CarbonActivitySchema carbonActivitySchema) {
+    const int minDuration = 5;
+
+    final duration = carbonActivitySchema.endedAt
+        ?.difference(carbonActivitySchema.startedAt)
+        .inMinutes ??
+        0;
+
+    return duration >= minDuration;
   }
 
   const CyclingState();

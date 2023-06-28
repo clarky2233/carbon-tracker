@@ -7,6 +7,7 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.d
 import 'package:carbon_footprint_tracker/models/sensors/sensors.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
+import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.objectbox.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:statemachine/statemachine.dart';
 import '../../activity_recognition/activity_recognition.dart';
@@ -31,15 +32,13 @@ import '../states/tracker_state.dart';
 // });
 
 final eventsProvider = rp.StateProvider<Stream<TrackerEvent>>((ref) {
-  final logger = ref.watch(loggingServiceProvider);
-
   return StreamGroup.merge<TrackerEvent>([
     ActivityRecognition.stream,
     Geo.stream,
     Sensors.stream(const Duration(seconds: 5)),
   ]).handleError((error, stackTrace) {
     log(error.toString());
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "Event stream error: ${error.toString()}",
     ));
@@ -52,17 +51,13 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
   final eventStream = ref.watch(eventsProvider);
 
   final activityService = ref.watch(activityServiceProvider);
-  final loggingService = ref.watch(loggingServiceProvider);
 
   final tracker = CarbonTracker(
     machine: Machine<TrackerState>(),
-    context: TrackerContext(
-      tmdModelPath: 'assets/models/tmd_rf.json',
-      logger: loggingService,
-    ),
     eventStream: eventStream,
     activityService: activityService,
-    logger: loggingService,
+    questionnaireService: QuestionnaireServiceObjectBox.instance,
+    context: TrackerContext(tmdModelPath: 'assets/models/tmd_rf.json'),
   );
 
   // tracker.logFood();

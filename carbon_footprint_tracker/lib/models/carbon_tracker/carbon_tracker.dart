@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/vehicle_state.dart';
 import 'package:carbon_footprint_tracker/models/event_log/event_log.dart';
@@ -12,6 +11,7 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_st
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
+import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:statemachine/statemachine.dart';
@@ -24,7 +24,7 @@ class CarbonTracker {
 
   List<TrackerState> states;
   ActivityService activityService;
-  LoggingService logger;
+  QuestionnaireService questionnaireService;
 
   static const List<TrackerState> _defaultStates = [
     IdleState(),
@@ -40,8 +40,8 @@ class CarbonTracker {
     required this.machine,
     required this.context,
     required this.eventStream,
-    required this.logger,
     required this.activityService,
+    required this.questionnaireService,
     this.states = _defaultStates,
   }) {
     // Initialize states in state machine
@@ -53,7 +53,7 @@ class CarbonTracker {
     for (State<TrackerState> state in _registeredStates.values) {
       // Define transitions between states
       state.onStream(eventStream, (event) async {
-        logger.logEvent(EventLog(
+        LoggingService.instance.logEvent(EventLog(
           dateTime: DateTime.now(),
           event: "Event received: ${event.name}",
         ));
@@ -90,15 +90,13 @@ class CarbonTracker {
       await transitionResult.action?.call(context, event);
 
       // Create Activity
-      if (transitionResult.autoCreateActivity &&
-          state.identifier.filter(context)) {
+      if (transitionResult.autoCreateActivity) {
         await createActivity(state.identifier);
       }
 
       // Reset Context
       if (transitionResult.resetContext) {
         context = TrackerContext(
-          logger: logger,
           transportMode: transitionResult.nextState.transportMode,
           rf: context.rf,
         );
@@ -109,8 +107,7 @@ class CarbonTracker {
         _registeredStates[transitionResult.nextState]?.enter();
       }
     } catch (error) {
-      log(error.toString(), stackTrace: StackTrace.current);
-      logger.logEvent(EventLog(
+      LoggingService.instance.logEvent(EventLog(
         dateTime: DateTime.now(),
         event: error.toString(),
       ));
@@ -130,7 +127,9 @@ class CarbonTracker {
     Placemark? endPlacemark;
     if (placeMarks.isNotEmpty) endPlacemark = placeMarks.first;
 
-    final activity = CarbonActivitySchema(
+    final userInfo = questionnaireService.getAnswers();
+
+    final activitySchema = CarbonActivitySchema(
       // type: machine.current!.identifier.name,
       type: MovementActivity.type,
       startedAt: context.startTime,
@@ -150,18 +149,30 @@ class CarbonTracker {
       endPostcode: endPlacemark?.postalCode,
       endSubLocality: endPlacemark?.subLocality,
       distance: context.distance,
-      transportMode: context.transportMode,
+      transportMode: ((context.transportMode ?? userInfo.transportMode) ??
+          TransportMode.flying),
     );
 
     // Combine Activity
-    if (_combineActivity(activity)) return;
+    if (_combineActivity(activitySchema)) return;
+
+    // Filter activity
+    if (!state.filter(activitySchema)) {
+      LoggingService.instance.logEvent(EventLog(
+        dateTime: DateTime.now(),
+        event: "Activity filtered out: ${activitySchema.transportMode}",
+      ));
+      return;
+    }
+
+    final activity = activitySchema.toActivity();
 
     // Save activity to database
-    activityService.saveActivity(activity.toActivity());
+    activityService.saveActivity(activity);
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
-      event: "Activity created: ${activity.transportMode}",
+      event: "Activity created: ${activitySchema.transportMode}",
     ));
   }
 
@@ -208,7 +219,7 @@ class CarbonTracker {
 
     activityService.updateActivity(lastActivity.toActivity());
 
-    logger.logEvent(EventLog(
+    LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
       event: "Activity combined: ${lastActivity.transportMode}",
     ));

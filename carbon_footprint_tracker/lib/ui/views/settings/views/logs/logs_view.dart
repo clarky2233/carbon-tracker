@@ -10,7 +10,6 @@ class LogsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final logs = ref.watch(logsProvider);
-    final logger = ref.watch(loggingServiceProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,7 +18,7 @@ class LogsView extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              logger.clearLogs();
+              LoggingService.instance.clearLogs();
               ref.invalidate(logsProvider);
             },
             icon: const Icon(Icons.delete_forever_outlined),

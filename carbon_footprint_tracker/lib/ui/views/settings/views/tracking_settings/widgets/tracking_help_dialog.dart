@@ -9,9 +9,9 @@ class TrackingHelpDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.my_location_outlined),
       title: const Text("Tracking Help"),
-      content: SingleChildScrollView(
+      content: const SingleChildScrollView(
         child: ListBody(
-          children: const [
+          children: [
             Text("We need these on so we can track your every movement!"),
           ],
         ),

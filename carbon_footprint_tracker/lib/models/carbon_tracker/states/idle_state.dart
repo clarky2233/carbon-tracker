@@ -1,8 +1,8 @@
 import 'package:carbon_footprint_tracker/models/carbon_tracker/states/tracker_state.dart';
 import 'package:flutter/material.dart';
 
+import '../../carbon_activity/carbon_activity_schema.dart';
 import '../../carbon_activity/constants/transport_mode.dart';
-import '../tracker_context.dart';
 
 class IdleState extends TrackerState {
   @override
@@ -15,7 +15,7 @@ class IdleState extends TrackerState {
   TransportMode? get transportMode => null;
 
   @override
-  bool filter(TrackerContext context) {
+  bool filter(CarbonActivitySchema carbonActivitySchema) {
     return true;
   }
 

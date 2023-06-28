@@ -4,6 +4,7 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transp
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/emission_factor/emission_factor.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/serializer.dart';
+import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.dart';
 import 'package:flutter/material.dart';
 import '../../ui/views/activity/widgets/movement_activity/movement_activity_view.dart';
 import '../../ui/views/activity_history/widgets/movement_activity_tile.dart';
@@ -278,11 +279,12 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
 
   @override
   MovementActivity toActivity(CarbonActivitySchema schema) {
+    final userInfo = QuestionnaireService.instance.getAnswers();
+
     final activity = MovementActivity(
       id: schema.id,
       startedAt: schema.startedAt,
       endedAt: schema.endedAt!,
-      // type: schema.type,
       distance: schema.distance,
       startLat: schema.startLat!,
       startLong: schema.startLong!,
@@ -300,10 +302,21 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
       endSubLocality: schema.endSubLocality,
       transportMode: schema.transportMode ?? TransportMode.flying,
     );
+
+    VehicleSize? usersDefaultVehicleSize;
+    FuelType? usersDefaultFuelType;
+    if (activity.transportMode == userInfo.transportMode) {
+      // usersDefaultVehicleSize = userInfo.
+      usersDefaultFuelType = userInfo.fuelType;
+    }
+
     activity
-      ..vehicleSize =
-          schema.vehicleSize ?? activity.transportMode.defaultVehicleSize
-      ..fuelType = schema.fuelType ?? activity.transportMode.defaultFuelType;
+      ..vehicleSize = schema.vehicleSize ??
+          usersDefaultVehicleSize ??
+          activity.transportMode.defaultVehicleSize
+      ..fuelType = schema.fuelType ??
+          usersDefaultFuelType ??
+          activity.transportMode.defaultFuelType;
 
     return activity;
   }
