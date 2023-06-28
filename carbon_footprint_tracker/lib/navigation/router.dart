@@ -61,7 +61,7 @@ final router = GoRouter(
               parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) {
                 return ActivityView(
-                  id: int.parse(state.params['id'] ?? "-1"),
+                  id: int.parse(state.pathParameters['id'] ?? "-1"),
                 );
               },
             ),

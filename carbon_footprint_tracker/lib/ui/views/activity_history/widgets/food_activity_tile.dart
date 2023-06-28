@@ -27,7 +27,7 @@ class FoodActivityTile extends StatelessWidget {
         onTap: () {
           context.pushNamed(
             NamedRoute.activity.name,
-            params: {'id': activity.id.toString()},
+            pathParameters: {'id': activity.id.toString()},
           );
         },
       ),

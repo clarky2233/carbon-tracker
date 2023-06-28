@@ -42,7 +42,7 @@ final eventsProvider = rp.StateProvider<Stream<TrackerEvent>>((ref) {
       dateTime: DateTime.now(),
       event: "Event stream error: ${error.toString()}",
     ));
-  });
+  }).asBroadcastStream();
 });
 
 final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {

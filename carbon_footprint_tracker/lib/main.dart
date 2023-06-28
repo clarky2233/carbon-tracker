@@ -12,23 +12,23 @@ import 'package:workmanager/workmanager.dart';
 import 'app.dart';
 import 'package:provider/provider.dart';
 
-@pragma('vm:entry-point')
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    log("Background task: $task STARTING");
-
-    // final container = ProviderContainer();
-
-    // container.listen(activityStreamProvider, (previous, next) {
-    //   log("Previous: ${previous?.value?.type.name} (${previous?.value?.confidence.name})\nNext: ${next.value?.type.name} (${next.value?.confidence.name})");
-    //   log("--------");
-    // });
-
-    await Future.delayed(const Duration(minutes: 1));
-
-    return Future.value(true);
-  });
-}
+// @pragma('vm:entry-point')
+// void callbackDispatcher() {
+//   Workmanager().executeTask((task, inputData) async {
+//     log("Background task: $task STARTING");
+//
+//     // final container = ProviderContainer();
+//
+//     // container.listen(activityStreamProvider, (previous, next) {
+//     //   log("Previous: ${previous?.value?.type.name} (${previous?.value?.confidence.name})\nNext: ${next.value?.type.name} (${next.value?.confidence.name})");
+//     //   log("--------");
+//     // });
+//
+//     await Future.delayed(const Duration(minutes: 1));
+//
+//     return Future.value(true);
+//   });
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

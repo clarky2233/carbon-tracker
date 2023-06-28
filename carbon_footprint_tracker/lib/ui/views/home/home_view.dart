@@ -11,20 +11,26 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TodaysEmissions(),
-            // SizedBox(height: 10),
-            // LatestEventTile(),
-            SizedBox(height: 10),
-            CurrentStateCard(),
-          ],
+      // appBar: AppBar(
+      //   scrolledUnderElevation: 0,
+      // ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 32),
+                TodaysEmissions(),
+                // SizedBox(height: 10),
+                // LatestEventTile(),
+                SizedBox(height: 10),
+                CurrentStateCard(),
+              ],
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

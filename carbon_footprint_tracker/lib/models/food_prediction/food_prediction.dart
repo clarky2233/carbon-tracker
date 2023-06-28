@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carbon_footprint_tracker/extensions/map_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/food_consumption.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
@@ -57,6 +59,6 @@ class FoodPrediction {
     final dayFreq = dayFoodFreq.max();
     if (dayFreq != null) votes.add(dayFreq);
 
-    print(votes);
+    log(votes.toString());
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
@@ -107,6 +109,10 @@ class CarbonTracker {
         _registeredStates[transitionResult.nextState]?.enter();
       }
     } catch (error) {
+      final transitionError = error as TransitionError<TrackerState>;
+      log(transitionError.toString());
+      log(transitionError.errors.toString());
+      log(error.toString(), stackTrace: StackTrace.current);
       LoggingService.instance.logEvent(EventLog(
         dateTime: DateTime.now(),
         event: error.toString(),

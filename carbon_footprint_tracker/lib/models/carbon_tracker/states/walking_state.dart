@@ -17,13 +17,16 @@ class WalkingState extends TrackerState {
   @override
   bool filter(CarbonActivitySchema carbonActivitySchema) {
     const int minDuration = 5;
+    const int minDistance = 50;
 
     final duration = carbonActivitySchema.endedAt
             ?.difference(carbonActivitySchema.startedAt)
             .inMinutes ??
         0;
 
-    return duration >= minDuration;
+    final distance = carbonActivitySchema.distance;
+
+    return duration >= minDuration && distance >= minDistance;
   }
 
   const WalkingState();
