@@ -34,6 +34,7 @@ class FoodActivity implements CarbonActivity {
   double? get emissions {
     return EmissionFactor.get(EmissionDetails(
       category: EmissionCategory.food,
+      foodConsumption: foodConsumption,
     ));
   }
 

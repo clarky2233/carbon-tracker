@@ -1,4 +1,5 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
+import 'package:dart_date/dart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,22 +16,20 @@ class FoodActivityTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
-      child: ListTile(
-        tileColor: Theme.of(context).colorScheme.onInverseSurface,
-        iconColor: Theme.of(context).colorScheme.tertiary,
-        leading: Icon(activity.foodConsumption.icon),
-        title: const Text("Food"),
-        subtitle: Text(activity.foodConsumption.text),
-        trailing: EmissionTrailing(activity: activity),
-        onTap: () {
-          context.pushNamed(
-            NamedRoute.activity.name,
-            pathParameters: {'id': activity.id.toString()},
-          );
-        },
-      ),
+    return ListTile(
+      // tileColor: Theme.of(context).colorScheme.onInverseSurface,
+      // iconColor: Theme.of(context).colorScheme.tertiary,
+      // leading: Icon(activity.foodConsumption.icon),
+      title: Text(activity.foodConsumption.text),
+      subtitle: Text(activity.date.toHumanString()),
+      trailing:
+          Text("${activity.emissions!.toStringAsFixed(1)} kg CO\u{2082}e"),
+      onTap: () {
+        context.pushNamed(
+          NamedRoute.activity.name,
+          pathParameters: {'id': activity.id.toString()},
+        );
+      },
     );
   }
 }

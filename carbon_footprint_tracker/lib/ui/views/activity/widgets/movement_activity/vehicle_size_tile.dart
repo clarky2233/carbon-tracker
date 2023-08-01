@@ -19,9 +19,10 @@ class VehicleSizeTile extends ConsumerWidget {
     if (activity.vehicleSize == VehicleSize.none) return const SizedBox();
 
     return ListTile(
-      leading: Icon(activity.transportMode.iconOutlined),
-      title: Text(activity.vehicleSize.name.capitalize()),
-      subtitle: const Text("Vehicle Size"),
+      contentPadding: EdgeInsets.zero,
+      // leading: Icon(activity.transportMode.iconOutlined),
+      title: Text("Vehicle size: ${activity.vehicleSize.name.capitalize()}"),
+      // subtitle: const Text("Vehicle Size"),
       trailing: IgnorePointer(
         child: IconButton(
           icon: const Icon(Icons.edit_outlined),

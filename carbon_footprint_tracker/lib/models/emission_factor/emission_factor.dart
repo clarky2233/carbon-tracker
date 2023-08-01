@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:carbon_footprint_tracker/models/carbon_activity/constants/food_consumption.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/vehicle_size.dart';
@@ -149,7 +150,29 @@ class EmissionFactor {
     // https://ourworldindata.org/grapher/carbon-intensity-electricity
     EmissionDetails(
       category: EmissionCategory.food,
-    ): -1,
+      foodConsumption: FoodConsumption.highMeat,
+    ): 7.16553,
+    // Scarborough et al. 2014
+    EmissionDetails(
+      category: EmissionCategory.food,
+      foodConsumption: FoodConsumption.mediumMeat,
+    ): 5.62358,
+    EmissionDetails(
+      category: EmissionCategory.food,
+      foodConsumption: FoodConsumption.lowMeat,
+    ): 4.67120,
+    EmissionDetails(
+      category: EmissionCategory.food,
+      foodConsumption: FoodConsumption.pescatarian,
+    ): 3.90023,
+    EmissionDetails(
+      category: EmissionCategory.food,
+      foodConsumption: FoodConsumption.vegetarian,
+    ): 3.80952,
+    EmissionDetails(
+      category: EmissionCategory.food,
+      foodConsumption: FoodConsumption.vegan,
+    ): 2.90249,
   };
 
   static double? get(EmissionDetails details) {
@@ -168,12 +191,14 @@ class EmissionDetails {
   final TransportMode? transportMode;
   final FuelType? fuelType;
   final VehicleSize? vehicleSize;
+  final FoodConsumption? foodConsumption;
 
   const EmissionDetails({
     required this.category,
     this.transportMode,
     this.fuelType,
     this.vehicleSize,
+    this.foodConsumption,
   }) : assert(
             (category == EmissionCategory.transport && transportMode != null) ||
                 category != EmissionCategory.transport);
@@ -186,18 +211,20 @@ class EmissionDetails {
           category == other.category &&
           transportMode == other.transportMode &&
           fuelType == other.fuelType &&
-          vehicleSize == other.vehicleSize;
+          vehicleSize == other.vehicleSize &&
+          foodConsumption == other.foodConsumption;
 
   @override
   int get hashCode =>
       category.hashCode ^
       transportMode.hashCode ^
       fuelType.hashCode ^
-      vehicleSize.hashCode;
+      vehicleSize.hashCode ^
+      foodConsumption.hashCode;
 
   @override
   String toString() {
-    return 'EmissionDetails{category: $category, transportMode: $transportMode, fuelType: $fuelType, vehicleSize: $vehicleSize}';
+    return 'EmissionDetails{category: $category, transportMode: $transportMode, fuelType: $fuelType, vehicleSize: $vehicleSize, foodConsumption: $foodConsumption}';
   }
 }
 

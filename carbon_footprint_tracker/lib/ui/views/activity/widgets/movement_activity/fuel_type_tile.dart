@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../models/carbon_activity/movement_activity.dart';
 
-
 class FuelTypeTile extends ConsumerWidget {
   final MovementActivity activity;
 
@@ -19,9 +18,10 @@ class FuelTypeTile extends ConsumerWidget {
     if (activity.fuelType == FuelType.none) return const SizedBox();
 
     return ListTile(
-      leading: Icon(activity.fuelType.icon),
-      title: Text(activity.fuelType.text),
-      subtitle: const Text("Fuel Type"),
+      contentPadding: EdgeInsets.zero,
+      // leading: Icon(activity.fuelType.icon),
+      title: Text("Fuel type: ${activity.fuelType.text}"),
+      // subtitle: const Text("Fuel Type"),
       trailing: IgnorePointer(
         child: IconButton(
           icon: const Icon(Icons.edit_outlined),

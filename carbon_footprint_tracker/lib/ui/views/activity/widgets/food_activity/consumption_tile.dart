@@ -14,7 +14,8 @@ class ConsumptionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: Icon(activity.foodConsumption.icon),
+      contentPadding: EdgeInsets.zero,
+      // leading: Icon(activity.foodConsumption.icon),
       title: Text(activity.foodConsumption.text),
       subtitle: Text(activity.foodConsumption.description),
       trailing: IgnorePointer(

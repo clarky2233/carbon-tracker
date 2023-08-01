@@ -28,17 +28,17 @@ class TMDFeatures {
   });
 
   List<double> get input => [
+        accelerometerMean,
         accelerometerMin,
         accelerometerMax,
-        accelerometerMean,
         accelerometerStd,
+        gyroscopeMean,
         gyroscopeMin,
         gyroscopeMax,
-        gyroscopeMean,
         gyroscopeStd,
+        magnetometerMean,
         magnetometerMin,
         magnetometerMax,
-        magnetometerMean,
         magnetometerStd,
       ];
 }
