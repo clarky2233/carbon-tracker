@@ -46,13 +46,13 @@ class TrackerContext {
     } catch (error) {
       LoggingService.instance.logEvent(EventLog(
         dateTime: DateTime.now(),
-        event: "Unable to load model",
+        event: "Unable to load model - $tmdModelPath",
       ));
     }
 
     LoggingService.instance.logEvent(EventLog(
       dateTime: DateTime.now(),
-      event: "Model Loaded!",
+      event: "Model Loaded! - $tmdModelPath",
     ));
 
     LoggingService.instance.logEvent(EventLog(

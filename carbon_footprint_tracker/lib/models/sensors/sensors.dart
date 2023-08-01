@@ -2,7 +2,9 @@ import 'dart:math';
 import 'dart:developer' as dev;
 import 'package:carbon_footprint_tracker/extensions/stream_extensions.dart';
 import 'package:carbon_footprint_tracker/models/carbon_tracker/events/accelerometer_event.dart';
+import 'package:carbon_footprint_tracker/models/event_log/event_log.dart';
 import 'package:carbon_footprint_tracker/models/sensors/tmd_features.dart';
+import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
 import 'package:collection/collection.dart';
 import 'package:stream_transform/stream_transform.dart';
 import '../carbon_tracker/events/tracker_event.dart';
@@ -11,40 +13,48 @@ import 'package:statistics/statistics.dart';
 
 class Sensors {
   static Stream<TrackerEvent> stream(Duration windowSize) {
-    return accelerometerStream(windowSize).combineLatestAll([
-      gyroscopeStream(windowSize),
-      magnetometerStream(windowSize),
-    ]).handleError((error) {
-      dev.log(error.toString());
-    })
-    .throttle(windowSize, trailing: true)
+    return accelerometerStream(windowSize)
+        .combineLatestAll([
+          gyroscopeStream(windowSize),
+          magnetometerStream(windowSize),
+        ])
+        .handleError((error) {
+          dev.log(error.toString());
+        })
+        .throttle(windowSize, trailing: true)
         // .where((events) =>
         //     events.map((e) => (e['id'] ?? 0).toInt()).toSet().length == 1)
         .map(
-      (events) {
-        final accMap = events[0];
-        final gyroMap = events[1];
-        final magMap = events[2];
+          (events) {
+            final accMap = events[0];
+            final gyroMap = events[1];
+            final magMap = events[2];
 
-        // dev.log(
-        //     "${accMap['id']} ${gyroMap['id']} ${magMap['id']} TMD Sensor Event!!!!");
+            // dev.log(
+            //     "${accMap['id']} ${gyroMap['id']} ${magMap['id']} TMD Sensor Event!!!!");
 
-        return TMDSensorEvent(TMDFeatures(
-          accelerometerMin: accMap['min']!,
-          accelerometerMax: accMap['max']!,
-          accelerometerMean: accMap['mean']!,
-          accelerometerStd: accMap['std']!,
-          gyroscopeMin: gyroMap['min']!,
-          gyroscopeMax: gyroMap['max']!,
-          gyroscopeMean: gyroMap['mean']!,
-          gyroscopeStd: gyroMap['std']!,
-          magnetometerMin: magMap['min']!,
-          magnetometerMax: magMap['max']!,
-          magnetometerMean: magMap['mean']!,
-          magnetometerStd: magMap['std']!,
-        ));
-      },
-    );
+            // LoggingService.instance.logEvent(EventLog(
+            //   dateTime: DateTime.now(),
+            //   event:
+            //       "Acc: ${accMap['mean']!}\nGyro: ${gyroMap['mean']!}\nMag: ${magMap['mean']!}",
+            // ));
+
+            return TMDSensorEvent(TMDFeatures(
+              accelerometerMin: accMap['min']!,
+              accelerometerMax: accMap['max']!,
+              accelerometerMean: accMap['mean']!,
+              accelerometerStd: accMap['std']!,
+              gyroscopeMin: gyroMap['min']!,
+              gyroscopeMax: gyroMap['max']!,
+              gyroscopeMean: gyroMap['mean']!,
+              gyroscopeStd: gyroMap['std']!,
+              magnetometerMin: magMap['min']!,
+              magnetometerMax: magMap['max']!,
+              magnetometerMean: magMap['mean']!,
+              magnetometerStd: magMap['std']!,
+            ));
+          },
+        );
   }
 
   static Stream<Map<String, double>> accelerometerStream(Duration windowSize) {

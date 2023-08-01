@@ -16,6 +16,7 @@ class VehicleState extends TrackerState {
 
   @override
   bool filter(CarbonActivitySchema carbonActivitySchema) {
+    return true;
     const int minDuration = 5;
 
     final duration = carbonActivitySchema.endedAt
