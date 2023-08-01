@@ -13,12 +13,10 @@ class TodaysEmissions extends ConsumerWidget {
     return emissionsStream.when(
       data: (total) {
         return Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Today's Emissions",
+              "Today",
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
@@ -27,7 +25,7 @@ class TodaysEmissions extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Card(
-              elevation: 0,
+              elevation: 10,
               shadowColor: Colors.transparent,
               color: Theme.of(context).colorScheme.surface,
               shape: RoundedRectangleBorder(
@@ -42,7 +40,7 @@ class TodaysEmissions extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "${total.toStringAsFixed(2)} kg CO\u{2082}e",
+                      "${total.toStringAsFixed(2)} kg",
                       textAlign: TextAlign.center,
                       style:
                           Theme.of(context).textTheme.displayMedium!.copyWith(
@@ -51,6 +49,14 @@ class TodaysEmissions extends ConsumerWidget {
                                     .onPrimaryContainer,
                                 fontWeight: FontWeight.bold,
                               ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "CO\u{2082}e",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ],
                 ),

@@ -16,10 +16,9 @@ class TransportModeTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      contentPadding: EdgeInsets.zero,
-      // leading: const Icon(Icons.commute_outlined),
-      title: Text("Transport mode: ${activity.transportMode.name.capitalize()}"),
-      // subtitle: const Text("Transport Mode"),
+      leading: const Icon(Icons.commute_outlined),
+      title: Text(activity.transportMode.name.capitalize()),
+      subtitle: const Text("Transport Mode"),
       trailing: IgnorePointer(
         child: IconButton(
           icon: const Icon(Icons.edit_outlined),

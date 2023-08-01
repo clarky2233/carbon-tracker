@@ -23,21 +23,11 @@ class FoodActivityView extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.zero,
         children: [
-          Text(
-            activity.title,
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Emissions: ${activity.emissions!.toStringAsFixed(2)} kg CO\u{2082}",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const Divider(height: 32),
-          // ActivityTitle(activity: activity),
-          // NoEmissionFactorAlert(activity: activity),
-          // const SizedBox(height: 20),
+          ActivityTitle(activity: activity),
+          NoEmissionFactorAlert(activity: activity),
+          const SizedBox(height: 20),
           ConsumptionTile(activity: activity),
         ],
       ),

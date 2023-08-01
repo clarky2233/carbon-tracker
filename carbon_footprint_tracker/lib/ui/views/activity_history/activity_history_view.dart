@@ -19,13 +19,13 @@ class ActivityHistoryView extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Activity"),
         actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     final activityBox = store.box<CarbonActivitySchema>();
-          //     activityBox.removeAll();
-          //   },
-          //   icon: const Icon(Icons.delete_outline),
-          // ),
+          IconButton(
+            onPressed: () {
+              final activityBox = store.box<CarbonActivitySchema>();
+              activityBox.removeAll();
+            },
+            icon: const Icon(Icons.delete_outline),
+          ),
         ],
       ),
       body: activityStream.when(
@@ -37,22 +37,22 @@ class ActivityHistoryView extends ConsumerWidget {
               itemBuilder: (context, i) {
                 final activity = activities[i];
 
-                // final showDateHeader = i == 0 ||
-                //     _isDifferentDate(
-                //       activity.getDate(),
-                //       activities[i - 1].getDate(),
-                //     );
-                //
-                // // Date header
-                // if (showDateHeader) {
-                //   return Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       DateHeader(dateTime: activity.getDate()),
-                //       activity.buildTile(),
-                //     ],
-                //   );
-                // }
+                final showDateHeader = i == 0 ||
+                    _isDifferentDate(
+                      activity.getDate(),
+                      activities[i - 1].getDate(),
+                    );
+
+                // Date header
+                if (showDateHeader) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DateHeader(dateTime: activity.getDate()),
+                      activity.buildTile(),
+                    ],
+                  );
+                }
 
                 return activity.buildTile();
               },

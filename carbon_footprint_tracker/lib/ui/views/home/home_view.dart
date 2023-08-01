@@ -17,8 +17,19 @@ class HomeView extends ConsumerWidget {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: const Center(
-            child: TodaysEmissions(),
+          child: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 32),
+                TodaysEmissions(),
+                // SizedBox(height: 10),
+                // LatestEventTile(),
+                SizedBox(height: 10),
+                CurrentStateCard(),
+              ],
+            ),
           ),
         ),
       ),
