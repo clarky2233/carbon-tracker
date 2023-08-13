@@ -194,24 +194,7 @@ class CarbonTracker {
     final timeDifference =
         activity.startedAt.difference(lastActivity.endedAt!).inMinutes;
 
-    // Calculate distance between last activity
-    // double distanceBetween = Geolocator.distanceBetween(
-    //   lastActivity.endLat!,
-    //   lastActivity.endLong!,
-    //   activity.startLat!,
-    //   activity.startLong!,
-    // );
-
-    /*
-    Rules for combining activities.
-    Combine if:
-      - distance between activities is less than 50m
-      and
-      - time difference is less than 60 minutes
-    */
-
     if (timeDifference > 60) return false;
-    // if (distanceBetween > 50 || timeDifference > 60) return false;
 
     // Combine the activities
     lastActivity

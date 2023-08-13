@@ -1,5 +1,3 @@
-import 'package:carbon_footprint_tracker/models/food_prediction/food_prediction.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/ui/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,8 +33,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     ref.watch(carbonTrackerProvider);
-
-    FoodPrediction(store: store).getData();
 
     return ThemeProvider(
       settings: settings,

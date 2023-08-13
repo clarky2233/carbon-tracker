@@ -1,14 +1,18 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity_schema.dart';
-import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.objectbox.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final activityServiceProvider = Provider<ActivityService>((ref) {
-  return ActivityServiceObjectBox(store: store);
-});
+// final activityServiceProvider = Provider<ActivityService>((ref) {
+//   return ActivityServiceObjectBox(store: store);
+// });
 
 abstract class ActivityService {
+  ActivityService._constructor();
+
+  static final ActivityService _instance = ActivityServiceObjectBox.instance;
+
+  static ActivityService get instance => _instance;
+
   Stream<List<CarbonActivity>> getActivityHistory();
 
   Stream<CarbonActivity?> getActivityStream(int id);

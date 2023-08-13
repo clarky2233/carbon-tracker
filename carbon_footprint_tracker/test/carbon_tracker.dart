@@ -12,7 +12,6 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/states/walking_st
 import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.dart';
 import 'package:carbon_footprint_tracker/objectbox.g.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
-import 'package:carbon_footprint_tracker/services/activity/activity_service.objectbox.dart';
 import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,16 +68,11 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
-    container.updateOverrides([
-      activityServiceProvider
-          .overrideWithValue(ActivityServiceObjectBox(store: store)),
-    ]);
-
     final carbonTracker = CarbonTracker(
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: const Stream<TrackerEvent>.empty(),
-      activityService: container.read(activityServiceProvider),
+      activityService: ActivityService.instance,
       questionnaireService: QuestionnaireService.instance,
     );
 
@@ -93,7 +87,7 @@ void main() {
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
-      activityService: container.read(activityServiceProvider),
+      activityService: ActivityService.instance,
       questionnaireService: QuestionnaireService.instance,
     );
 
@@ -112,7 +106,7 @@ void main() {
       machine: Machine<TrackerState>(),
       context: TrackerContext(),
       eventStream: eventStreamController.stream,
-      activityService: container.read(activityServiceProvider),
+      activityService: ActivityService.instance,
       questionnaireService: QuestionnaireService.instance,
     );
 

@@ -11,12 +11,8 @@ import '../../../../models/carbon_activity/constants/transport_mode.dart';
 import '../../../../models/carbon_activity/constants/vehicle_size.dart';
 
 class MovementActivityNotifier extends AutoDisposeNotifier<MovementActivity> {
-  late ActivityService activityService;
-
   @override
   MovementActivity build() {
-    activityService = ref.watch(activityServiceProvider);
-
     return MovementActivity(
       startedAt: DateTime.now().startOfHour,
       endedAt: DateTime.now().startOfHour.add(const Duration(minutes: 30)),
@@ -177,7 +173,7 @@ class MovementActivityNotifier extends AutoDisposeNotifier<MovementActivity> {
     check = await setEndPosition();
     if (!check) return check;
 
-    activityService.saveActivity(state);
+    ActivityService.instance.saveActivity(state);
 
     return true;
   }

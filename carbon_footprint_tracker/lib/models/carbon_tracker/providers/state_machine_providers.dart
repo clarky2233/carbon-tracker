@@ -7,9 +7,9 @@ import 'package:carbon_footprint_tracker/models/carbon_tracker/tracker_context.d
 import 'package:carbon_footprint_tracker/models/sensors/sensors.dart';
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 import 'package:carbon_footprint_tracker/services/logging/logging_service.dart';
-import 'package:carbon_footprint_tracker/services/questionnaire/questionnaire_service.objectbox.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:statemachine/statemachine.dart';
+import '../../../services/questionnaire/questionnaire_service.dart';
 import '../../activity_recognition/activity_recognition.dart';
 import '../carbon_tracker.dart';
 import '../events/tracker_event.dart';
@@ -50,21 +50,13 @@ final carbonTrackerProvider = rp.Provider<CarbonTracker>((ref) {
   // final eventStream = ref.watch(eventsProvider.stream);
   final eventStream = ref.watch(eventsProvider);
 
-  final activityService = ref.watch(activityServiceProvider);
-
   final tracker = CarbonTracker(
     machine: Machine<TrackerState>(),
     eventStream: eventStream,
-    activityService: activityService,
-    questionnaireService: QuestionnaireServiceObjectBox.instance,
+    activityService: ActivityService.instance,
+    questionnaireService: QuestionnaireService.instance,
     context: TrackerContext(tmdModelPath: 'assets/models/tmd_rf.json'),
   );
 
-  // tracker.logFood();
-
   return tracker;
 });
-
-// final currentStateProvider = rp.StateProvider<TrackerState?>((ref) {
-//   return ref.watch(carbonTrackerProvider).machine.current?.identifier;
-// });

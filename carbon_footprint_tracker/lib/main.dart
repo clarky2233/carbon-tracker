@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:carbon_footprint_tracker/models/activity_recognition/activity_recognition.dart';
 import 'package:carbon_footprint_tracker/models/geo/geo.dart';
@@ -11,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 import 'app.dart';
 import 'package:provider/provider.dart';
+
+import 'models/food_prediction/food_prediction.dart';
 
 // @pragma('vm:entry-point')
 // void callbackDispatcher() {
@@ -50,6 +51,8 @@ void main() async {
   //   "simpleTask",
   //   inputData: {'storePath': storePath},
   // );
+
+  FoodPrediction(store: store).predict();
 
   runApp(
     ProviderScope(

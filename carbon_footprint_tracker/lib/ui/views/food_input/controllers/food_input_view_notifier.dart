@@ -4,11 +4,8 @@ import 'package:carbon_footprint_tracker/services/activity/activity_service.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FoodInputViewNotifier extends AutoDisposeNotifier<FoodConsumption?> {
-  late ActivityService activityService;
-
   @override
   FoodConsumption? build() {
-    activityService = ref.watch(activityServiceProvider);
     return null;
   }
 
@@ -24,7 +21,7 @@ class FoodInputViewNotifier extends AutoDisposeNotifier<FoodConsumption?> {
       foodConsumption: state!,
     );
 
-    activityService.saveActivity(foodActivity);
+    ActivityService.instance.saveActivity(foodActivity);
   }
 }
 

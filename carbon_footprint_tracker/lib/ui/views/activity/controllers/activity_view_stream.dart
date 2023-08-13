@@ -5,6 +5,5 @@ import '../../../../services/activity/activity_service.dart';
 
 final activityProvider =
     StreamProvider.autoDispose.family<CarbonActivity?, int>((ref, id) async* {
-  final activityService = ref.watch(activityServiceProvider);
-  yield* activityService.getActivityStream(id);
+  yield* ActivityService.instance.getActivityStream(id);
 });

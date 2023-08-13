@@ -11,18 +11,15 @@ import '../../../../services/activity/activity_service.dart';
 
 class ActivityViewNotifier
     extends AutoDisposeFamilyNotifier<CarbonActivity, CarbonActivity> {
-  late ActivityService activityService;
-
   ActivityViewNotifier();
 
   @override
   CarbonActivity build(CarbonActivity arg) {
-    activityService = ref.watch(activityServiceProvider);
     return arg;
   }
 
   void deleteActivity() {
-    activityService.deleteActivity(state.id);
+    ActivityService.instance.deleteActivity(state.id);
   }
 
   void updateFoodConsumption(FoodConsumption foodConsumption) {
@@ -30,7 +27,7 @@ class ActivityViewNotifier
 
     state = (state as FoodActivity).copyWith(foodConsumption: foodConsumption);
 
-    activityService.updateActivity(state);
+    ActivityService.instance.updateActivity(state);
   }
 
   void updateTransportMode(TransportMode transportMode) {
@@ -42,7 +39,7 @@ class ActivityViewNotifier
       fuelType: transportMode.defaultFuelType,
     );
 
-    activityService.updateActivity(state);
+    ActivityService.instance.updateActivity(state);
   }
 
   void updateVehicleSize(VehicleSize vehicleSize) {
@@ -50,7 +47,7 @@ class ActivityViewNotifier
 
     state = (state as MovementActivity).copyWith(vehicleSize: vehicleSize);
 
-    activityService.updateActivity(state);
+    ActivityService.instance.updateActivity(state);
   }
 
   void updateFuelType(FuelType fuelType) {
@@ -58,7 +55,7 @@ class ActivityViewNotifier
 
     state = (state as MovementActivity).copyWith(fuelType: fuelType);
 
-    activityService.updateActivity(state);
+    ActivityService.instance.updateActivity(state);
   }
 }
 

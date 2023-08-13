@@ -4,6 +4,5 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final activityHistoryProvider =
     StreamProvider<List<CarbonActivity>>((ref) async* {
-  final activityService = ref.watch(activityServiceProvider);
-  yield* activityService.getActivityHistory();
+  yield* ActivityService.instance.getActivityHistory();
 });
