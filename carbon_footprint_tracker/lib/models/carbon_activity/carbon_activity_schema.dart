@@ -1,4 +1,5 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/electricity_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/serializer.dart';
 import 'package:objectbox/objectbox.dart';
@@ -52,6 +53,8 @@ class CarbonActivitySchema {
   @Transient()
   FoodConsumption? foodConsumption;
 
+  int? kiloWatts;
+
   CarbonActivitySchema({
     this.id = 0,
     required this.type,
@@ -76,6 +79,7 @@ class CarbonActivitySchema {
     this.fuelType,
     this.transportMode,
     this.foodConsumption,
+    this.kiloWatts,
   });
 
   String? get dbFuelType {
@@ -130,6 +134,7 @@ class CarbonActivitySchema {
     final Map<String, Serializer> serializers = {
       "food": const FoodActivitySerializer(),
       "movement": const MovementActivitySerializer(),
+      "electricity": const ElectricityActivitySerializer(),
     };
 
     if (!serializers.containsKey(type)) {

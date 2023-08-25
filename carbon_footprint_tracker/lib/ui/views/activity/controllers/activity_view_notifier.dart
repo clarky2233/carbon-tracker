@@ -1,5 +1,6 @@
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/fuel_type.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/constants/transport_mode.dart';
+import 'package:carbon_footprint_tracker/models/carbon_activity/electricity_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/food_activity.dart';
 import 'package:carbon_footprint_tracker/models/carbon_activity/movement_activity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +55,14 @@ class ActivityViewNotifier
     if (state is! MovementActivity) return;
 
     state = (state as MovementActivity).copyWith(fuelType: fuelType);
+
+    ActivityService.instance.updateActivity(state);
+  }
+
+  void updateElectricityUsage(int usage) {
+    if (state is! ElectricityActivity) return;
+
+    state = (state as ElectricityActivity).copyWith(kiloWatts: usage);
 
     ActivityService.instance.updateActivity(state);
   }

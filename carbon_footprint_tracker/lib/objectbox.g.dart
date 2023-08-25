@@ -4,7 +4,7 @@
 // With a Dart package, run `dart run build_runner build`.
 // See also https://docs.objectbox.io/getting-started#generate-objectbox-code
 
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, depend_on_referenced_packages
 // coverage:ignore-file
 
 import 'dart:typed_data';
@@ -82,7 +82,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(8, 2844881390421948169),
       name: 'CarbonActivitySchema',
-      lastPropertyId: const IdUid(23, 4292925692117170474),
+      lastPropertyId: const IdUid(24, 5780599889388550771),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -199,6 +199,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(23, 4292925692117170474),
             name: 'dbFoodConsumption',
             type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(24, 5780599889388550771),
+            name: 'kiloWatts',
+            type: 6,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -443,7 +448,7 @@ ModelDefinition getObjectBoxModel() {
           final dbFoodConsumptionOffset = object.dbFoodConsumption == null
               ? null
               : fbb.writeString(object.dbFoodConsumption!);
-          fbb.startTable(24);
+          fbb.startTable(25);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.startedAt.millisecondsSinceEpoch);
           fbb.addInt64(2, object.endedAt?.millisecondsSinceEpoch);
@@ -467,6 +472,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(20, dbVehicleSizeOffset);
           fbb.addOffset(21, dbTransportModeOffset);
           fbb.addOffset(22, dbFoodConsumptionOffset);
+          fbb.addInt64(23, object.kiloWatts);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -504,7 +510,8 @@ ModelDefinition getObjectBoxModel() {
               endAdministrativeArea: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 28),
               endCountry: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 30),
               endPostcode: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 32),
-              endSubLocality: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 34))
+              endSubLocality: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 34),
+              kiloWatts: const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 50))
             ..dbFuelType = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 42)
             ..dbVehicleSize = const fb.StringReader(asciiOptimization: true)
@@ -649,4 +656,8 @@ class CarbonActivitySchema_ {
   /// see [CarbonActivitySchema.dbFoodConsumption]
   static final dbFoodConsumption =
       QueryStringProperty<CarbonActivitySchema>(_entities[2].properties[22]);
+
+  /// see [CarbonActivitySchema.kiloWatts]
+  static final kiloWatts =
+      QueryIntegerProperty<CarbonActivitySchema>(_entities[2].properties[23]);
 }

@@ -63,7 +63,7 @@
     },
     {
       "id": "8:2844881390421948169",
-      "lastPropertyId": "23:4292925692117170474",
+      "lastPropertyId": "24:5780599889388550771",
       "name": "CarbonActivitySchema",
       "properties": [
         {
@@ -181,6 +181,11 @@
           "id": "23:4292925692117170474",
           "name": "dbFoodConsumption",
           "type": 9
+        },
+        {
+          "id": "24:5780599889388550771",
+          "name": "kiloWatts",
+          "type": 6
         }
       ],
       "relations": []

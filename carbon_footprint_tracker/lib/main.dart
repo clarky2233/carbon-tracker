@@ -1,4 +1,3 @@
-
 import 'package:carbon_footprint_tracker/models/activity_recognition/activity_recognition.dart';
 import 'package:carbon_footprint_tracker/models/geo/geo.dart';
 import 'package:carbon_footprint_tracker/models/object_box/object_box.dart';
@@ -11,6 +10,7 @@ import 'package:workmanager/workmanager.dart';
 import 'app.dart';
 import 'package:provider/provider.dart';
 
+import 'models/electricity/electricity.dart';
 import 'models/food_prediction/food_prediction.dart';
 
 // @pragma('vm:entry-point')
@@ -53,6 +53,7 @@ void main() async {
   // );
 
   FoodPrediction(store: store).predict();
+  Electricity().predict();
 
   runApp(
     ProviderScope(
