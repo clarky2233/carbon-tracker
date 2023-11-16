@@ -10,7 +10,8 @@ import '../emission_factor/emission_factor.dart';
 import 'constants/food_consumption.dart';
 
 class FoodActivity implements CarbonActivity {
-  static const String type = "food";
+  @override
+  String type = "food";
 
   @override
   int id;
@@ -90,7 +91,7 @@ class FoodActivitySerializer extends Serializer<FoodActivity> {
   CarbonActivitySchema toDB(FoodActivity activity) {
     return CarbonActivitySchema(
       id: activity.id,
-      type: FoodActivity.type,
+      type: activity.type,
       startedAt: activity.date,
       foodConsumption: activity.foodConsumption,
     );

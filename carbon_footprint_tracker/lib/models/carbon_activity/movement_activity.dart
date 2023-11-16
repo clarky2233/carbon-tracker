@@ -12,7 +12,8 @@ import 'constants/fuel_type.dart';
 import 'constants/vehicle_size.dart';
 
 class MovementActivity implements CarbonActivity {
-  static const String type = "movement";
+  @override
+  String type = "movement";
 
   @override
   int id;
@@ -325,7 +326,7 @@ class MovementActivitySerializer extends Serializer<MovementActivity> {
   CarbonActivitySchema toDB(MovementActivity activity) {
     return CarbonActivitySchema(
       id: activity.id,
-      type: MovementActivity.type,
+      type: activity.type,
       startedAt: activity.startedAt,
       endedAt: activity.endedAt,
       distance: activity.distance,

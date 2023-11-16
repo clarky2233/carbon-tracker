@@ -137,7 +137,7 @@ class CarbonTracker {
 
     final activitySchema = CarbonActivitySchema(
       // type: machine.current!.identifier.name,
-      type: MovementActivity.type,
+      type: "movement",
       startedAt: context.startTime,
       endedAt: DateTime.now(),
       startLat: context.startPosition!.latitude,

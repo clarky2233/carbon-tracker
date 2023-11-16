@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import '../emission_factor/emission_factor.dart';
 
 class ElectricityActivity implements CarbonActivity {
-  static const String type = "electricity";
+  @override
+  String type = "electricity";
 
   @override
   int id;
@@ -89,7 +90,7 @@ class ElectricityActivitySerializer extends Serializer<ElectricityActivity> {
   CarbonActivitySchema toDB(ElectricityActivity activity) {
     return CarbonActivitySchema(
       id: activity.id,
-      type: ElectricityActivity.type,
+      type: activity.type,
       startedAt: activity.date,
       kiloWatts: activity.kiloWatts,
     );

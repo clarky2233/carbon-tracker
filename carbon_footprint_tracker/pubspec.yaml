@@ -41,7 +41,7 @@ dependencies:
   go_router: ^9.0.0
   flutter_activity_recognition: ^2.0.0
   workmanager: ^0.5.1
-  intl: ^0.17.0
+  intl: ^0.18.0
   geolocator: ^9.0.2
   geocoding: ^2.1.0
   permission_handler: ^10.3.0
@@ -52,7 +52,7 @@ dependencies:
   sensors_plus: ^3.0.2
   statistics: ^1.0.23
   sklite: ^1.0.0
-  noise_meter: ^3.2.0
+  syncfusion_flutter_charts: ^22.2.10
 
   async: any
   path: any

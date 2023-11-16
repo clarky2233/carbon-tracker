@@ -2,7 +2,6 @@ import 'package:carbon_footprint_tracker/models/carbon_activity/carbon_activity.
 import 'package:carbon_footprint_tracker/services/activity/activity_service.dart';
 
 import '../../models/carbon_activity/carbon_activity_schema.dart';
-import '../../models/carbon_activity/movement_activity.dart';
 import '../../models/object_box/object_box.dart';
 import '../../objectbox.g.dart';
 
@@ -76,7 +75,7 @@ class ActivityServiceObjectBox implements ActivityService {
   CarbonActivitySchema? getLatestActivity() {
     final box = store.box<CarbonActivitySchema>();
     final query = box
-        .query(CarbonActivitySchema_.type.equals(MovementActivity.type))
+        .query(CarbonActivitySchema_.type.equals("movement"))
         .order(CarbonActivitySchema_.endedAt, flags: Order.descending)
         .build()
       ..limit = 1;

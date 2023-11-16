@@ -8,6 +8,8 @@ abstract class CarbonActivity {
 
   abstract Serializer serializer;
 
+  abstract final String type;
+
   double? get emissions;
 
   String get title;

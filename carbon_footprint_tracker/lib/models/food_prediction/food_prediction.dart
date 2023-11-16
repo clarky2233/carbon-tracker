@@ -74,7 +74,7 @@ class FoodPrediction {
     final box = store.box<CarbonActivitySchema>();
 
     final query = box
-        .query(CarbonActivitySchema_.type.equals(FoodActivity.type))
+        .query(CarbonActivitySchema_.type.equals("food"))
         .order(CarbonActivitySchema_.startedAt, flags: Order.descending)
         .build();
 
@@ -88,7 +88,7 @@ class FoodPrediction {
 
     for (FoodConsumption foodConsumption in FoodConsumption.values) {
       final query = box
-          .query(CarbonActivitySchema_.type.equals(FoodActivity.type).and(
+          .query(CarbonActivitySchema_.type.equals("food").and(
               CarbonActivitySchema_.dbFoodConsumption
                   .equals(foodConsumption.name)))
           .build();
@@ -103,7 +103,7 @@ class FoodPrediction {
     final box = store.box<CarbonActivitySchema>();
 
     final query = box
-        .query(CarbonActivitySchema_.type.equals(FoodActivity.type))
+        .query(CarbonActivitySchema_.type.equals("food"))
         .order(CarbonActivitySchema_.startedAt, flags: Order.descending)
         .build();
 
@@ -114,7 +114,7 @@ class FoodPrediction {
     final box = store.box<CarbonActivitySchema>();
 
     final query = box
-        .query(CarbonActivitySchema_.type.equals(FoodActivity.type))
+        .query(CarbonActivitySchema_.type.equals("food"))
         .order(CarbonActivitySchema_.startedAt, flags: Order.descending)
         .build();
 

@@ -30,6 +30,15 @@ class ActivityHistoryView extends ConsumerWidget {
       ),
       body: activityStream.when(
         data: (activities) {
+          if (activities.isEmpty) {
+            return Center(
+              child: Text(
+                "No Activities",
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            );
+          }
+
           return RefreshIndicator(
             onRefresh: () async => ref.refresh(activityHistoryProvider),
             child: ListView.builder(

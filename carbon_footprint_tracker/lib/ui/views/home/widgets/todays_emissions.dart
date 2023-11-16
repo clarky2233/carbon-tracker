@@ -18,10 +18,10 @@ class TodaysEmissions extends ConsumerWidget {
             Text(
               "Today",
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .displayLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 48,
+                  ),
             ),
             const SizedBox(height: 8),
             Card(
